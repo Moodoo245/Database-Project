@@ -51,3 +51,39 @@ CREATE TABLE Acts ( StaffId INT,
 		    OrdersCredit INT,
 		    FOREIGN KEY (StaffId) REFERENCES MovieStaff,
 		    FOREIGN KEY (ClipId) REFERENCES Clip )
+CREATE TABLE Clip ( ClipId INT,
+					ClipTitle VARCHAR(100),
+					ClipYear INT,
+					ClipType VARCHAR(20),
+					PRIMARY KEY (ClipId) )
+CREATE TABLE ClipLinks( ClipFrom INT,
+						ClipTo INT,
+						LinkType VARCHAR(20) )
+CREATE TABLE Ratings ( ClipId INT,
+						Votes INT,
+						RANK DOUBLE,
+						PRIMARY KEY (ClipId, Votes),
+						FOREIGN KEY (ClipId) REFERENCES Clip,
+						ON DELETE CASCADE )
+CREATE TABLE ReleaseCountry ( ClipId INT,
+							  ReleaseCountry VARCHAR(40),
+							  ReleaseDate INT,
+							  RunningTime INT,
+							  PRIMARY KEY (ClidId, ReleaseCountry),
+							  FOREIGN KEY (ClipId) REFERENCES Clip,
+							  ON DELETE CASCADE )
+CREATE TABLE Country ( ClipId INT,
+						CountryName VARCHAR(40),
+						PRIMARY KEY (ClipId, CountryName),
+						FOREIGN KEY (ClidId) REFERENCES Clip,
+						ON DELETE CASCADE )
+CREATE TABLE Languages (ClipId INT,
+						Language VARCHAR(20),
+						PRIMARY KEY (ClipId, Language),
+						FOREIGN KEY (ClipId) REFERENCES Clip,
+						ON DELETE CASCADE )
+CREATE TABLE Genres (ClipId INT,
+					Genre VARCHAR(20),
+					PRIMARY KEY (ClipId, Genre),
+					FOREIGN KEY (ClipId) REFERENCES Clip,
+					ON DELETE CASCADE )
