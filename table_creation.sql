@@ -14,7 +14,7 @@ CREATE TABLE Biographies ( StaffId INT,
 			   Salary INT,
 			   Trademark VARCHAR(20),
 			   WhereAreTheyNow TEXT,
-			   PRIMARY KEY (StaffId, Name),
+			   PRIMARY KEY (StaffId),
 			   FOREIGN KEY (StaffId) REFERENCES MovieStaff
 			   	ON DELETE CASCADE )
 
@@ -59,10 +59,12 @@ CREATE TABLE Clip ( ClipId INT,
 CREATE TABLE ClipLinks( ClipFrom INT,
 						ClipTo INT,
 						LinkType VARCHAR(20) )
+						FOREIGN KEY (ClipFrom) REFERENCES Clip
+						FOREIGN KEY (ClipTo) REFERENCES Clip
 CREATE TABLE Ratings ( ClipId INT,
 						Votes INT,
 						RANK DOUBLE,
-						PRIMARY KEY (ClipId, Votes),
+						PRIMARY KEY (ClipId),
 						FOREIGN KEY (ClipId) REFERENCES Clip,
 						ON DELETE CASCADE )
 CREATE TABLE ReleaseCountry ( ClipId INT,
