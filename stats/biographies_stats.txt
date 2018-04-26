@@ -1,0 +1,17 @@
+Attribute		Entries		Percentage
+
+Name:			447'015		100%
+RealName:		110'688		25%
+Nickname:		36'946		8.3%
+DateAndPlaceOfBirth:	323'923		72.5%
+Height:			103'449		23.1%
+Biography:		55'066		12.3%
+Biographer:		54'091		12.1%
+DateAndCauseOfDeath:	95'463		21.4%
+Spouse:			83'213		18.6%
+Trivia:			167'049		37.4%
+BiographicalBooks:	7'820		1.7%
+PersonalQuotes:		17'575		3.9%
+Salary:			2'105		0.4%
+Trademark:		6'775		1.5%
+WhereAreTheyNow:	29'532		6.6%

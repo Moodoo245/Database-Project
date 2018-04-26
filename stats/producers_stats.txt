@@ -1,0 +1,6 @@
+Attribute		Entries		Percentage
+
+FullName		364'742		100%
+ClipIds			364'742		100%
+Roles			364'010		100%
+AddInfos		31'934		8.8%

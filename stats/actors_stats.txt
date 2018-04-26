@@ -1,0 +1,7 @@
+Attribute		Entries		Percentage
+
+FullName		2'006'886	100%
+ClipIds			2'006'886	100%
+Chars			1'710'027	85.2%
+OrdersCredit		1'113'136	55.5%
+AddInfos		357'234		17.8%

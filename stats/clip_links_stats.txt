@@ -1,0 +1,5 @@
+Attribute		Entries		Percentage
+
+ClipFrom		921'023		100%
+ClipTo			921'023		100%
+LinkType		921'023		100%

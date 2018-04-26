@@ -1,0 +1,7 @@
+Attribute		Entries		Percentage
+
+FullName		299'521		100%
+ClipIds			299'521		100%
+WorkTypes		92'566		30.9%
+Roles			208'361		69.6%
+AddInfos		72'540		24.2%
