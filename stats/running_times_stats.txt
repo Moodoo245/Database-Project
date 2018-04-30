@@ -1,0 +1,5 @@
+Attribute		Entries		Percentage
+
+ClipId			588'123		100%
+ReleaseCountry		285'583		48.6%
+RunningTime		553'068		99.9%

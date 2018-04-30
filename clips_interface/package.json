@@ -1,0 +1,16 @@
+{
+  "name": "clips_interface",
+  "version": "1.0.0",
+  "description": "interface for the database project",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pedro Torres Da Cunha",
+  "license": "ISC",
+  "dependencies": {
+    "pg": "*",
+    "express": "*",
+    "body-parser": "*"
+  }
+}

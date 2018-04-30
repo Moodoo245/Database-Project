@@ -1,0 +1,6 @@
+Attribute		Entries		Percentage
+
+ClipId			1'736'160	100%
+ClipTitle		1'736'160	100%
+ClipYear		1'735'524	99.9%
+clipType		1'219'785	70.3%
