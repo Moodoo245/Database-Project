@@ -1,91 +1,138 @@
-CREATE TABLE Biographies ( StaffId INT, 
-			   Name VARCHAR(40),
-			   Realname VARCHAR(40),
-			   Nickname VARCHAR(40),
-			   DateAndPlaceOfBirth VARCHAR(40),
-			   Height ENUM(feet, inches),
-			   Biography TEXT,
-			   Biographer VARCHAR(40),
-			   DateAndCauseOfDeath VARCHAR(100),
-			   Spouse VARCHAR(40),
-			   Trivia TEXT,
-			   BiographicalBooks TEXT,
-			   PersonalQuotes TEXT,
-			   Salary INT,
-			   Trademark VARCHAR(20),
-			   WhereAreTheyNow TEXT,
-			   PRIMARY KEY (StaffId),
-			   FOREIGN KEY (StaffId) REFERENCES MovieStaff
-			   	ON DELETE CASCADE )
+CREATE TABLE MovieStaff (
+	StaffId SERIAL,
+	FullName VARCHAR(128),
+	PRIMARY KEY (StaffId)
+);
 
-CREATE TABLE MovieStaff ( StaffId INT,
-			  FullName VARCHAR(40),
-			  PRIMARY KEY (FullName) )
+CREATE TABLE Biographies (
+	StaffId INT, 
+	Name VARCHAR(64),
+	Realname VARCHAR(64),
+	DateAndPlaceOfBirth VARCHAR(128),
+	Height VARCHAR(16),
+	Biography TEXT,
+	Biographer VARCHAR(40),
+	DateAndCauseOfDeath VARCHAR(128),
+	Trivia TEXT,
+	PersonalQuotes TEXT,
+	Salary TEXT,
+	Trademark VARCHAR(256),
+	WhereAreTheyNow TEXT,
+	PRIMARY KEY (StaffId),
+	FOREIGN KEY (StaffId) REFERENCES MovieStaff ON DELETE CASCADE
+);
 
-CREATE TABLE Writes ( StaffId INT,
-		      ClipId INT,
-		      AddInfos VARCHAR(100),
-		      Role VARCHAR(40),
-		      WorkType VARCHAR(40),
-		      FOREIGN KEY (StaffId) REFERENCES MovieStaff,
-		      FOREIGN KEY (ClipId) REFERENCES Clip )
+CREATE TABLE BiographicalBooks (
+	StaffId INT,
+	Book VARCHAR(128)
+);
 
-CREATE TABLE Produces ( StaffId INT,
-			ClipId INT,
-			AddInfos VARCHAR(100),
-			Role VARCHAR(40),
-			FOREIGN KEY (StaffId) REFERENCES MovieStaff,
-			FOREIGN KEY (ClipId) REFERENCES Clip )
+CREATE TABLE Spouses (
+	StaffId INT,
+	Spouse VARCHAR(128),
+	FOREIGN KEY (StaffId) REFERENCES MovieStaff ON DELETE CASCADE
+);
 
-CREATE TABLE Directs ( StaffId INT,
-		       ClipId INT,
-		       AddInfos VARCHAR(100),
-		       Role VARCHAR(40),
-		       FOREIGN KEY (StaffId) REFERENCES MovieStaff,
-		       FOREIGN KEY (ClipId) REFERENCES Clip )
+CREATE TABLE Clip (
+	ClipId INT,
+	ClipTitle TEXT,
+	ClipYear INT,
+	ClipType VARCHAR(64),
+	PRIMARY KEY (ClipId)
+);
 
-CREATE TABLE Acts ( StaffId INT,
-		    ClipId INT,
-		    AddInfos VARCHAR(100),
-		    Char VARCHAR(40),
-		    OrdersCredit INT,
-		    FOREIGN KEY (StaffId) REFERENCES MovieStaff,
-		    FOREIGN KEY (ClipId) REFERENCES Clip )
-CREATE TABLE Clip ( ClipId INT,
-					ClipTitle VARCHAR(100),
-					ClipYear INT,
-					ClipType VARCHAR(20),
-					PRIMARY KEY (ClipId) )
-CREATE TABLE ClipLinks( ClipFrom INT,
-						ClipTo INT,
-						LinkType VARCHAR(20) )
-						FOREIGN KEY (ClipFrom) REFERENCES Clip
-						FOREIGN KEY (ClipTo) REFERENCES Clip
-CREATE TABLE Ratings ( ClipId INT,
-						Votes INT,
-						RANK DOUBLE,
-						PRIMARY KEY (ClipId),
-						FOREIGN KEY (ClipId) REFERENCES Clip,
-						ON DELETE CASCADE )
-CREATE TABLE ReleaseCountry ( ClipId INT,
-							  ReleaseCountry VARCHAR(40),
-							  ReleaseDate INT,
-							  RunningTime INT,
-							  PRIMARY KEY (ClidId, ReleaseCountry),
-							  FOREIGN KEY (ClipId) REFERENCES Clip,
-							  ON DELETE CASCADE )
-CREATE TABLE Country ( ClipId INT,
-						CountryName VARCHAR(40),
-						PRIMARY KEY (ClipId, CountryName),
-						FOREIGN KEY (ClidId) REFERENCES Clip,
-						ON DELETE CASCADE )
-CREATE TABLE Languages (ClipId INT,
-						Language VARCHAR(20),
-						PRIMARY KEY (ClipId, Language),
-						FOREIGN KEY (ClipId) REFERENCES Clip,
-						ON DELETE CASCADE )
-CREATE TABLE Genres (ClipId INT,
-					Genre VARCHAR(20),
-					PRIMARY KEY (ClipId, Genre),
-					FOREIGN KEY (ClipId) REFERENCES Clip,
-					ON DELETE CASCADE )
+CREATE TABLE Writes (
+	StaffId INT,
+	ClipId INT,
+	AddInfos VARCHAR(128),
+	Role VARCHAR(128),
+	WorkType TEXT,
+	PRIMARY KEY (StaffId, ClipId),
+	FOREIGN KEY (StaffId) REFERENCES MovieStaff ON DELETE CASCADE,
+	FOREIGN KEY (ClipId) REFERENCES Clip ON DELETE CASCADE
+);
+
+CREATE TABLE Produces (
+	StaffId INT,
+	ClipId INT,
+	AddInfos VARCHAR(100),
+	Role TEXT,
+	PRIMARY KEY (StaffId, ClipId),
+	FOREIGN KEY (StaffId) REFERENCES MovieStaff ON DELETE CASCADE,
+	FOREIGN KEY (ClipId) REFERENCES Clip ON DELETE CASCADE
+);
+
+CREATE TABLE Directs (
+	StaffId INT,
+	ClipId INT,
+	AddInfos VARCHAR(100),
+	Role TEXT,
+	PRIMARY KEY (StaffId, ClipId),
+	FOREIGN KEY (StaffId) REFERENCES MovieStaff ON DELETE CASCADE,
+	FOREIGN KEY (ClipId) REFERENCES Clip ON DELETE CASCADE
+);
+
+CREATE TABLE Acts (
+	StaffId INT,
+	ClipId INT,
+	Char TEXT,
+	OrdersCredit INT,
+	AddInfos TEXT,
+	PRIMARY KEY (StaffId, ClipId),
+	FOREIGN KEY (StaffId) REFERENCES MovieStaff ON DELETE CASCADE,
+	FOREIGN KEY (ClipId) REFERENCES Clip ON DELETE CASCADE
+);
+
+CREATE TABLE ClipLinks(
+	ClipFrom INT,
+	ClipTo INT,
+	LinkType VARCHAR(32),
+	PRIMARY KEY (ClipFrom, ClipTo, LinkType),
+	FOREIGN KEY (ClipFrom) REFERENCES Clip ON DELETE CASCADE,
+	FOREIGN KEY (ClipTo) REFERENCES Clip ON DELETE CASCADE
+);
+
+CREATE TABLE Ratings (
+	ClipId INT,
+	Votes INT,
+	RANK REAL,
+	PRIMARY KEY (ClipId),
+	FOREIGN KEY (ClipId) REFERENCES Clip ON DELETE CASCADE
+);
+
+CREATE TABLE RunningTime (
+	ClipId INT,
+	ReleaseCountry VARCHAR(32),
+	RunningTime INT,
+	PRIMARY KEY (ClidId, ReleaseCountry),
+	FOREIGN KEY (ClipId) REFERENCES Clip ON DELETE CASCADE
+);
+
+CREATE TABLE ReleaseDates (
+	ClipId INT,
+	ReleaseCountry varchar(32),
+	ReleaseDate VARCHAR(32),
+	PRIMARY KEY (ClipId, ReleaseCountry),
+	FOREIGN KEY (ClipId) REFERENCES Clip ON DELETE CASCADE
+);
+
+CREATE TABLE AssociatedCountry (
+	ClipId INT,
+	CountryName VARCHAR(40),
+	PRIMARY KEY (ClipId, CountryName),
+	FOREIGN KEY (ClidId) REFERENCES Clip ON DELETE CASCADE
+);
+
+CREATE TABLE Languages (
+	ClipId INT,
+	Language VARCHAR(64),
+	PRIMARY KEY (ClipId, Language),
+	FOREIGN KEY (ClipId) REFERENCES Clip ON DELETE CASCADE
+);
+
+CREATE TABLE Genres (
+	ClipId INT,
+	Genre VARCHAR(32),
+	PRIMARY KEY (ClipId, Genre),
+	FOREIGN KEY (ClipId) REFERENCES Clip ON DELETE CASCADE
+);

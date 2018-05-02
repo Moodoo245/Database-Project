@@ -2,7 +2,7 @@ import utils
 import csv
 import re
 
-with open('initial/directors.csv', 'r', encoding='utf8') as data:
+with open('initial/directs.csv', 'r', encoding='utf8') as data:
     reader = csv.reader(data)
     with open('cleaned/direct_cleaned.csv', 'w', encoding='utf8') as out:
         writer = csv.writer(out)
