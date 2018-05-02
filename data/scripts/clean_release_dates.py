@@ -16,6 +16,6 @@ with open('initial/release_dates.csv', encoding="utf8") as csvfile:
             new_row = (clipid, only_letters)
             # Only keep the numbers and the letters in the "ReleaseDate" column
             only_numbers_letters = utils.alet(row[2])
-            if utils.diff_letters(no_accents, only_letters) < 2 and len(only_letters) != 0 and only_letters.lower() != 'null' and new_row not in added:
+            if utils.diff_letters(no_accents, only_letters) < 2 and only_letters.lower() != 'null' and new_row not in added:
                 wr.writerow((clipid, only_letters, only_numbers_letters))
                 added.add(new_row)
