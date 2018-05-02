@@ -1,7 +1,7 @@
 import csv
 import unicodedata
 import re
-import scripts/utils
+import utils
 
 with open('initial/running_times.csv', encoding="utf8") as csvfile:
     reader = csv.reader(csvfile)
