@@ -15,5 +15,6 @@ with open('initial/clips.csv', encoding="utf8") as csvfile:
             only_numbers = utils.numbers(row[2])
             # Only keep the doubles in the "ClipType" column
             only_letters = utils.lettres(row[3])
-            wr.writerow((clipid, row[1], only_numbers, only_letters))
-            added.add((clipid))
+            if len(clipid) != 0 and clipid.lower() != 'null' and (clipid) not in added:
+                wr.writerow((clipid, row[1], only_numbers, only_letters))
+                added.add((clipid))
