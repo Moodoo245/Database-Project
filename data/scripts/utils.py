@@ -4,6 +4,8 @@ import re
 
 def numbers(idx):
     return re.sub('[^0-9|]+', '', idx)
+def double(idx):
+    return re.sub('[^0-9.|]+', '', idx)
 def lettres(idx):
     return re.sub('[^A-Za-z| ]+', '', idx)
 def alet(idx):
