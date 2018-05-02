@@ -1,12 +1,15 @@
 body {
 	margin: 0;
 	background-color: #eeeeee;
+	width: 100%;
 }
 
 .menu {
 	background-color: #333333;
 	color: white;
 	overflow: hidden;
+	border-radius: 0px 0px 10px 10px;
+	margin: 0px 10px 0px 10px;
 }
 
 .menu h1 {
@@ -47,20 +50,22 @@ body {
 
 .search-form {
 	text-align: center;
-	padding: 16px;
-	margin: 0px;
+	margin: 16px;
 }
 
-.result-table th {
-	background-color: lemonchiffon;
+.search-form input {
+	font-size:20px;
+}
+
+.result-table {
+	overflow-x: auto;
+	width: 90%;
+	margin: auto; 
 }
 
 .result-table table {
 	border-collapse: collapse;
-	width: 90%;
-	margin: auto; 
-	overflow-x: auto;
-	overflow-y: auto;
+	width: 100%;
 }
 
 .result-table th, tr:nth-child(odd) {
@@ -70,4 +75,69 @@ body {
 .result-table th, td {
 	text-align: left;
 	padding: 8px;
+}
+
+.max-width {
+	width: 100%;
+	max-width: 750px;
+}
+
+.insert-table {
+	width: 50%;
+	text-align: center;
+	left: 0;
+	float: left;
+}
+
+.insert-table form {
+	margin: 0;
+	padding: 16px;
+}
+
+.insert-table ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+.insert-table ul li {
+	list-style-type: none;
+	padding: 0;
+}
+
+.insert-table ul li input {
+	padding: 12px;
+	background-color: dimgray;
+	color: white;
+	display: block;
+	margin: 12px auto;
+	font-size: 20px;
+}
+
+.right-pane {
+	width: 50%;
+	float: right;
+}
+
+.insert-column {
+	margin: auto;
+}
+
+.insert-column form {
+
+}
+
+.insert-column .column-entry {
+	float: right;
+	display: block;
+}
+
+.insert-column input {
+	margin: 12px;
+	font-size: 20;
+	display: inline;
+}
+
+.insert-column .submit-button {
+	float: right;
+	display: block;
 }

@@ -11,11 +11,11 @@ with open('initial/running_times.csv', encoding="utf8") as csvfile:
         added = set()
         for row in reader:
             clipid = row[0]
-            no_accents = acc(row[1])
-            only_letters = lettres(no_accents)
+            no_accents = utils.acc(row[1])
+            only_letters = utils.lettres(no_accents)
             new_row = (clipid, only_letters)
             # Only keep the numbers in the "RunningTime" column
             only_numbers = numbers(row[2])
-            if diff_letters(no_accents, only_letters) < 2 and len(only_letters) != 0 and only_letters.lower() != 'null' and new_row not in added:
+            if utils.diff_letters(no_accents, only_letters) < 2 and len(only_letters) != 0 and only_letters.lower() != 'null' and new_row not in added:
                 wr.writerow((clipid, only_letters, only_numbers))
                 added.add(new_row)
