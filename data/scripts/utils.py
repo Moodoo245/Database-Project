@@ -15,3 +15,12 @@ def acc(idx):
     return u"".join([c for c in nfkd_form if not unicodedata.combining(c)])
 def diff_letters(a,b):
     return abs(len(a) - len(b))
+
+def get_staff_map():
+    map = {}
+    with open('cleaned/staff_map.csv', 'r', encoding='utf8') as data:
+        reader = csv.reader(data)
+        for name, id in reader:
+            map[name] = int(id)
+
+    return map
