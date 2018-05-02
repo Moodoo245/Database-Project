@@ -15,7 +15,7 @@ with open('initial/directors.csv', 'r', encoding='utf8') as data:
             name = utils.lettres(row[0]).lstrip()
             clipIds = re.split("\|", row[1][1:-1])
             roles = re.split("\|", row[2][1:-1])
-            addInfos = re.split("\|", row[4][1:-1])
+            addInfos = re.split("\|", row[3][1:-1])
             size = len(clipIds)
             if name in staff_map and len(roles) == size and len(addInfos) == size:
                 for i in range(size):
