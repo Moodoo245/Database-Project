@@ -2,9 +2,9 @@ import utils
 import csv
 import re
 
-with open('initial/directs.csv', 'r', encoding='utf8') as data:
+with open('initial/directors.csv', 'r', encoding='utf8') as data:
     reader = csv.reader(data)
-    with open('cleaned/direct_cleaned.csv', 'w', encoding='utf8') as out:
+    with open('cleaned/directs_cleaned.csv', 'w', encoding='utf8') as out:
         writer = csv.writer(out)
         staff_map = utils.get_staff_map()
         next(reader)
