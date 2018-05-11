@@ -9,8 +9,9 @@
   "author": "Pedro Torres Da Cunha",
   "license": "ISC",
   "dependencies": {
-    "pg": "*",
+    "body-parser": "*",
     "express": "*",
-    "body-parser": "*"
+    "morgan": "^1.9.0",
+    "pg": "*"
   }
 }
