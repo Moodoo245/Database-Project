@@ -13,9 +13,10 @@ with open('initial/running_times.csv', encoding="utf8") as csvfile:
             clipid = row[0]
             no_accents = utils.acc(row[1])
             only_letters = utils.lettres(no_accents)
-            new_row = (clipid, only_letters)
+            null_to_empty_string = utils.null_to_empty_string(only_letters)
+            new_row = (clipid, null_to_empty_string)
             # Only keep the numbers in the "RunningTime" column
             only_numbers = utils.numbers(row[2])
             if utils.diff_letters(no_accents, only_letters) < 2 and only_letters.lower() != 'null' and new_row not in added:
-                wr.writerow((clipid, only_letters, only_numbers))
+                wr.writerow((clipid, null_to_empty_string, only_numbers))
                 added.add(new_row)
