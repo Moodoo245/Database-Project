@@ -15,6 +15,8 @@ def acc(idx):
     return u"".join([c for c in nfkd_form if not unicodedata.combining(c)])
 def diff_letters(a,b):
     return abs(len(a) - len(b))
+def null_to_empty_string(idx):
+    return re.sub('^(?![\s\S])','EMPTY', idx)
 
 def get_staff_map():
     map = {}
