@@ -1,7 +1,15 @@
 body {
 	margin: 0;
-	background-color: #eeeeee;
+	background-image: url('/images/white_pattern.jpg');
 	width: 100%;
+}
+
+.clickable {
+	color: rgb(0,0,200);
+}
+
+.clickable:hover {
+	color: rgb(100,100,230);
 }
 
 .menu {
@@ -74,42 +82,64 @@ body {
 
 #search-results {
 	text-align: center;
+	margin: 16px;
 }
 
-	#search-results .result-table {
-		display: inline-block;
-		text-align: left;
-	}
+.result-table {
+	display: inline-block;
+	vertical-align: top;
+	padding: 8px;
+	text-align: left;
+	max-width: 50%;
+	overflow: auto;
+	box-sizing: border-box;
+}
 		
-		#search-results .result-table .result-header {
-			padding: 8px;
-			background-color: #444444;
-			color: white;
-			border-radius: 4px 12px 0px 0px;
-		}
+.result-table .result-header {
+	padding: 8px;
+	background-color: #444444;
+	color: white;
+	border-radius: 4px 12px 0px 0px;
+}
 
-		#search-results .result-table .result-row {
-			padding: 8px;
-			cursor: pointer;
-		}
+.result-table .result-row {
+	padding: 8px;
+	cursor: pointer;
+	overflow: auto;
+}
 
-			#search-results .result-table .result-row:nth-child(odd) {
-				background-color: white
-			}
+.result-table .result-row:nth-child(odd) {
+	background-color: white;
+}
 
-			#search-results .result-table .result-row > i {
-				float: right;
-				margin-left: 8px;
-			}
+.result-table .result-row:nth-child(even) {
+	background-color: #eeeeee;
+}
 
-			#search-results .result-table .result-row .more_info {
-				border-top: 1px solid #bbbbbb;
-				margin-top: 5px;
-				padding-top: 5px;
-			}
+.result-table .result-row > i {
+	float: right;
+	margin-left: 8px;
+}
 
-.played-in > h4 {
+.more-info {
+	border-top: 1px solid #bbbbbb;
+	margin-top: 5px;
+	padding: 5px 5px 0px 5px;
+	display: none;
+}
+
+.more-info .property {
+	margin: 2px 0px;
+}
+
+.more-info .property > h4 {
+	padding: 0px;
 	margin: 0px;
+}
+
+.more-info .property > ul {
+	padding-left: 25px;
+	margin: 2px 0px;
 }
 
 .loader {
@@ -132,19 +162,20 @@ body {
 	}
 }
 
-#left-pane {
-	float: left;
+#insertion {
+	text-align: center;
+	font-size:0px;
 }
 
-#tables {
+#left-pane {
 	margin: 12px;
 	display: inline-block;
-	float: right;
+	vertical-align: top;
 	background-color: #dddddd;
 	border-radius: 5px;
 }
 
-#tables .table-button {
+#left-pane .table-button {
 	padding: 12px;
 	margin: 12px;
 	text-align: center;
@@ -155,37 +186,33 @@ body {
 	border-radius: 5px;
 }
 
-#tables .table-button:hover {
+#left-pane .table-button:hover {
 	background-color: #222222;
 }
 
-#tables .selected-button {
+#left-pane .selected-button {
 	background-color: #222222;
 }
 
 #right-pane {
-	text-align: center;
-	float: left;
-}
-
-#columns {
 	margin: 12px;
 	display: inline-block;
+	vertical-align: top;
 	background-color: #dddddd;
 	border-radius: 5px 5px 20px 20px;
 }
 
-.column {
+#right-pane .column {
+	text-align: right;
 	padding: 12px;
 	font-size: 20px;
 }
 
-.column input {
-	float: right;
+#right-pane .column input {
 	font-size: 16px;
 }
 
-#insert_button {
+#right-pane #insert_button {
 	background-color: #444444;
 	font-size: 20px;
 	color: white;

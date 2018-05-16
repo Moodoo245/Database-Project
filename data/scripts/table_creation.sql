@@ -6,17 +6,17 @@ CREATE TABLE MovieStaff (
 
 CREATE TABLE Biographies (
 	StaffId INT, 
-	Name VARCHAR(64),
-	Realname VARCHAR(64),
+	Name VARCHAR(128),
+	Realname TEXT,
 	DateAndPlaceOfBirth VARCHAR(128),
 	Height VARCHAR(16),
 	Biography TEXT,
-	Biographer VARCHAR(32),
-	DateAndCauseOfDeath VARCHAR(128),
+	Biographer VARCHAR(128),
+	DateAndCauseOfDeath TEXT,
 	Trivia TEXT,
 	PersonalQuotes TEXT,
 	Salary TEXT,
-	Trademark VARCHAR(256),
+	Trademark TEXT,
 	WhereAreTheyNow TEXT,
 	PRIMARY KEY (StaffId),
 	FOREIGN KEY (StaffId) REFERENCES MovieStaff ON DELETE CASCADE

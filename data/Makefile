@@ -65,11 +65,11 @@ import_produces: scripts/import_csv.py cleaned/produces_cleaned.csv
 import_biographies: scripts/import_csv.py cleaned/biographies_cleaned.csv
 	python scripts/import_csv.py cleaned/biographies_cleaned.csv biographies
 
-import_clip_links: scripts/import_csv.py cleaned/clip_links_cleaned.csv
-	python scripts/import_csv.py cleaned/clip_links_cleaned.csv clip_links
+import_cliplinks: scripts/import_csv.py cleaned/clip_links_cleaned.csv
+	python scripts/import_csv.py cleaned/clip_links_cleaned.csv cliplinks
 
 import_countries: scripts/import_csv.py cleaned/countries_cleaned.csv
-	python scripts/import_csv.py cleaned/countries_cleaned.csv countries
+	python scripts/import_csv.py cleaned/countries_cleaned.csv AssociatedCountries
 
 import_genres: scripts/import_csv.py cleaned/genres_cleaned.csv
 	python scripts/import_csv.py cleaned/genres_cleaned.csv genres
