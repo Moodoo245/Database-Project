@@ -8,7 +8,7 @@ CREATE TABLE Biographies (
 	StaffId INT, 
 	Name VARCHAR(128),
 	Realname TEXT,
-	DateAndPlaceOfBirth VARCHAR(128),
+	DateAndPlaceOfBirth TEXT,
 	Height VARCHAR(16),
 	Biography TEXT,
 	Biographer VARCHAR(128),

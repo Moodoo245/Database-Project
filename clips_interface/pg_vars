@@ -2,4 +2,4 @@ export PGUSER=postgres
 export PGHOST=localhost
 export PGDATABASE=clipsdb
 export PGPASSWORD=donccnod
-export PGPORT=5432
+export PGPORT=5433
