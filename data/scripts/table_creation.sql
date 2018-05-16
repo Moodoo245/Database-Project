@@ -14,6 +14,7 @@ CREATE TABLE Biographies (
 	Biographer VARCHAR(128),
 	DateAndCauseOfDeath TEXT,
 	Trivia TEXT,
+	PersonalQuotes TEXT,
 	Trademark TEXT,
 	WhereAreTheyNow TEXT,
 	PRIMARY KEY (StaffId, Name),
@@ -35,13 +36,6 @@ CREATE TABLE Salaries (
 	FOREIGN KEY (StaffId) REFERENCES MovieStaff ON DELETE CASCADE
 );
 	
-CREATE TABLE PersonalQuotes (
-	StaffId INT,
-	Quote TEXT,
-	PRIMARY KEY (StaffId, Quote),
-	FOREIGN KEY (StaffId REFERENCES MovieStaff ON DELETE CASCADE
-);
-
 CREATE TABLE Books (
 	StaffId INT,
 	Book VARCHAR(128),
@@ -124,17 +118,31 @@ CREATE TABLE Ratings (
 );
 
 CREATE TABLE Languages (
-	ClipId INT,
+	LanguageId INT,
 	Language VARCHAR(64),
-	PRIMARY KEY (ClipId, Language),
-	FOREIGN KEY (ClipId) REFERENCES Clips ON DELETE CASCADE
+	PRIMARY KEY (LanguageId)
+);
+
+CREATE TABLE Speaks (
+	ClipId INT,
+	LanguageId INT,
+	PRIMARY KEY (ClipId, LanguageId),
+	FOREIGN KEY (ClipId) REFERENCES Clips ON DELETE CASCADE,
+	FOREIGN KEY (LanguageId) REFERENCES Languages ON DELETE CASCADE
 );
 
 CREATE TABLE Genres (
-	ClipId INT,
+	GenreId INT,
 	Genre VARCHAR(32),
-	PRIMARY KEY (ClipId, Genre),
-	FOREIGN KEY (ClipId) REFERENCES Clips ON DELETE CASCADE
+	PRIMARY KEY (GenreId)
+);
+
+CREATE TABLE Classified (
+	ClipId INT,
+	GenreId INT,
+	PRIMARY KEY (ClipId, GenreId),
+	FOREIGN KEY (ClipId) REFERENCES Clips ON DELETE CASCADE,
+	FOREIGN KEY (GenreId) REFERENCES Genres ON DELETE CASCADE
 );
 
 CREATE TABLE Country (
