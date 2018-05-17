@@ -26,3 +26,13 @@ def get_staff_map():
             map[name] = int(id)
 
     return map
+
+
+def get_country_map():
+    map = {}
+    with open('cleaned/country_map.csv', 'r', encoding='utf8') as data:
+        reader = csv.reader(data)
+        for name, id in reader:
+            map[name] = int(id)
+
+    return map
