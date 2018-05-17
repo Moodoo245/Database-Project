@@ -36,3 +36,12 @@ def get_country_map():
             map[name] = int(id)
 
     return map
+
+def get_clip_set():
+    s = set()
+    with open('cleaned/clips_set.csv', 'r', encoding='utf8') as data:
+        reader = csv.reader(data)
+        for id in reader:
+            s.add(id)
+
+    return s

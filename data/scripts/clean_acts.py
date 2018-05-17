@@ -7,6 +7,7 @@ with open('initial/actors.csv', 'r', encoding='utf8') as data:
     with open('cleaned/acts_cleaned.csv', 'w', encoding='utf8') as out:
         writer = csv.writer(out)
         staff_map = utils.get_staff_map()
+		clips = utils.get_clip_set()
         next(reader)
 
         added = set()
@@ -20,12 +21,13 @@ with open('initial/actors.csv', 'r', encoding='utf8') as data:
             size = len(clipIds)
             if name in staff_map and len(chars) == size and len(orders) == size and len(addInfos) == size:
                 for i in range(size):
-                    staffid = staff_map[name]
-                    clipId = clipIds[i]
-                    pair = (staffid, clipId)
-                    if pair not in added:
-                        cha = utils.lettres(chars[i])
-                        order = utils.numbers(orders[i])
-                        addInf = utils.alet(addInfos[i])
-                        writer.writerow((staffid, clipId, cha, order, addInf))
-                        added.add(pair)
+					if clipIds[i] in clips:
+						staffid = staff_map[name]
+						clipId = clipIds[i]
+						pair = (staffid, clipId)
+						if pair not in added:
+							cha = utils.lettres(chars[i])
+							order = utils.numbers(orders[i])
+							addInf = utils.alet(addInfos[i])
+							writer.writerow((staffid, clipId, cha, order, addInf))
+							added.add(pair)

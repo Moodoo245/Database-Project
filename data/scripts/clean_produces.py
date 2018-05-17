@@ -7,6 +7,7 @@ with open('initial/producers.csv', 'r', encoding='utf8') as data:
     with open('cleaned/produces_cleaned.csv', 'w', encoding='utf8') as out:
         writer = csv.writer(out)
         staff_map = utils.get_staff_map()
+		clips = utils.get_clip_set()
         next(reader)
 
         added = set()
@@ -19,11 +20,12 @@ with open('initial/producers.csv', 'r', encoding='utf8') as data:
             size = len(clipIds)
             if name in staff_map and len(roles) == size and len(addInfos) == size:
                 for i in range(size):
-                    staffid = staff_map[name]
-                    clipId = clipIds[i]
-                    pair = (staffid, clipId)
-                    if pair not in added:
-                        role = utils.alet(roles[i])
-                        addInf = utils.alet(addInfos[i])
-                        writer.writerow((staffid, clipId, role, addInf))
-                        added.add(pair)
+					if clipIds[i] in clips:
+						staffid = staff_map[name]
+						clipId = clipIds[i]
+						pair = (staffid, clipId)
+						if pair not in added:
+							role = utils.alet(roles[i])
+							addInf = utils.alet(addInfos[i])
+							writer.writerow((staffid, clipId, role, addInf))
+							added.add(pair)
