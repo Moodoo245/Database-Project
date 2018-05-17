@@ -3,10 +3,12 @@ import unicodedata
 import re
 import utils
 
-with open('initial/clips.csv', encoding="utf8") as csvfile:
+with open('initial/clips.csv', encoding='utf8') as csvfile:
+	
     reader = csv.reader(csvfile)
     next(reader)
-    with open('cleaned/clips_cleaned.csv', 'w', encoding="utf8") as out:
+
+    with open('cleaned/clips_cleaned.csv', 'w', encoding='utf8') as out:
         wr = csv.writer(out)
         added = set()
         for row in reader:
@@ -18,3 +20,9 @@ with open('initial/clips.csv', encoding="utf8") as csvfile:
             if len(clipid) != 0 and clipid.lower() != 'null' and (clipid) not in added:
                 wr.writerow((clipid, row[1], only_numbers, only_letters))
                 added.add((clipid))
+		
+		
+with open('cleaned/clips_set.csv', 'w', encoding='utf8') as fclips_set:
+
+	clip_set = csv.writer(fclips_set)
+	clip_set.writerows(added)
