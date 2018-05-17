@@ -10,6 +10,8 @@ with open('initial/biographies.csv', encoding="utf8") as csvfile:
     wr_bio = csv.writer(bio)
     sp = open('cleaned/spouses_cleaned.csv', 'w', encoding='utf8')
     wr_sp = csv.writer(sp)
+    sa = open('cleaned/salaries_cleaned.csv', 'w', encoding='utf8')
+    wr_sa = csv.writer(sa)
     booksf = open('cleaned/biographical_books_cleaned.csv', 'w', encoding='utf8')
     wr_book = csv.writer(booksf)
     nicks = open('cleaned/nicknames_cleaned.csv', 'w', encoding='utf8')
@@ -17,6 +19,7 @@ with open('initial/biographies.csv', encoding="utf8") as csvfile:
 
     staff_map = utils.get_staff_map()
     added = set()
+    added_salaries = set()
     added_spouses = set()
     added_books = set()
     added_nicks = set()
@@ -36,9 +39,17 @@ with open('initial/biographies.csv', encoding="utf8") as csvfile:
                 salary = row[12]
                 trademark = row[13]
                 where_are_they_now = row[14]
-                new_row = (staffid, name, real_name, date_and_place_of_birth, height, biography, biographer, date_and_cause_of_death, trivia, personal_quotes, salary, trademark, where_are_they_now)
+                new_row = (staffid, name, real_name, date_and_place_of_birth, height, biography, biographer, date_and_cause_of_death, trivia, personal_quotes, trademark, where_are_they_now)
                 wr_bio.writerow(new_row)
                 added.add(staffid)
+
+                if len(row[12]) > 0:
+                    salaries = re.split("\|", row[12][1:-1])
+                    for salary in salaries:
+                        pair = (staffid, salary)
+                        if pair not in added_salaries:
+                            wr_sa.writerow(pair)
+                            added_salaries.add(pair)
 
                 if len(row[8]) > 0:
                     spouses = re.split("\|", row[8][1:-1])
