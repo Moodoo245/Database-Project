@@ -112,8 +112,8 @@ CREATE TABLE ClipLinks(
 CREATE TABLE Ratings (
 	ClipId INT,
 	Votes INT,
-	RANK REAL,
-	PRIMARY KEY (ClipId, RANK),
+	Rank REAL,
+	PRIMARY KEY (ClipId, Rank),
 	FOREIGN KEY (ClipId) REFERENCES Clips ON DELETE CASCADE
 );
 
