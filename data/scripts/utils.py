@@ -42,6 +42,6 @@ def get_clip_set():
     with open('cleaned/clips_set.csv', 'r', encoding='utf8') as data:
         reader = csv.reader(data)
         for id in reader:
-            s.add(id)
+            s.add(id[0])
 
     return s
