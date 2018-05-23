@@ -22,10 +22,10 @@ with open('initial/running_times.csv', encoding="utf8") as csvfile:
                 null_to_empty_string = utils.null_to_empty_string(only_letters)
                 # Only keep the numbers in the "RunningTime" column
                 only_numbers = utils.numbers(row[2])
-           
+
                 if null_to_empty_string in country_map:
                     countryId = country_map[null_to_empty_string]
                     new_row = (clipid, countryId)
-                    if utils.diff_letters(l, b) < 2 and len(b) != 0 and b.lower() != 'null' and new_row not in added:
+                    if len(null_to_empty_string) != 0 and null_to_empty_string.lower() != 'null' and new_row not in added:
                         wr.writerow((clipid, countryId, null_to_empty_string, only_numbers))
                         added.add(new_row)

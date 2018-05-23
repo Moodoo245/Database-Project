@@ -5,7 +5,7 @@ import utils
 
 with open('initial/release_dates.csv', encoding="utf8") as csvfile:
     reader = csv.reader(csvfile)
-   
+
     with open('cleaned/releasedates_cleaned.csv', 'w', encoding="utf8") as out:
         wr = csv.writer(out)
         country_map = utils.get_country_map()
@@ -26,6 +26,6 @@ with open('initial/release_dates.csv', encoding="utf8") as csvfile:
                 if null_to_empty_string in country_map:
                     countryId = country_map[null_to_empty_string]
                     new_row = (clipid, countryId)
-                    if utils.diff_letters(l, b) < 2 and len(b) != 0 and b.lower() != 'null' and new_row not in added:
+                    if len(null_to_empty_string) != 0 and null_to_empty_string.lower() != 'null' and new_row not in added:
                         wr.writerow((clipid, countryId, null_to_empty_string, only_numbers_letters))
                         added.add(new_row)
