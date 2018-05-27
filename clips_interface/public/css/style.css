@@ -12,6 +12,10 @@ body {
 	color: rgb(100,100,230);
 }
 
+input[type=text]:disabled {
+	background-color: #eeeeee;
+}
+
 .menu {
 	background-color: #333333;
 	color: white;
@@ -58,11 +62,15 @@ body {
 
 #search {
 	text-align: center;
-	margin: 16px;
-	font-size:0px;
+	font-size: 0px;
 }
 
-#search input {
+#search-bar {
+	display: table;
+	margin: 8px auto;
+}
+
+#search-bar input {
 	font-size:20px;
 }
 
@@ -78,6 +86,41 @@ body {
 
 #search-button:hover {
 	background-color: #111111;
+}
+
+#search-options {
+	font-size: 18px;
+	margin: 8px auto;
+	display: table;
+	border-radius: 5px;
+	text-align: left;
+	border: solid 3px #333333;
+	vertical-align: top;
+	background-color: #333333;
+}
+
+#search-options .header {
+	padding: 3px 5px;
+	color: white;
+	cursor: pointer;
+}
+
+#search-options .header > i {
+	padding: 2px 5px 2px 10px;
+	float: right;
+}
+
+#search-options .content {
+	padding: 2px 4px 2px 0px;
+	display: none;
+	background-color: white;
+	border-radius: 3px;
+}
+
+#search-options .content .node > .leaf {
+	margin-left: 10px;
+	display: none;
+	border-left: solid 2px #999999;
 }
 
 #search-results {
@@ -126,6 +169,8 @@ body {
 	margin-top: 5px;
 	padding: 5px 5px 0px 5px;
 	display: none;
+	max-height: 500px;
+	overflow-y: auto;
 }
 
 .more-info .property {

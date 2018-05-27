@@ -2,6 +2,8 @@ all: delete clean
 
 clean: clean_staff clean_clips clean_acts clean_writes clean_directs clean_produces clean_biographies clean_clip_links clean_countries clean_genres clean_languages clean_ratings clean_releasedates clean_runningtimes
 
+import: import_staff import_clips import_acts import_writes import_directs import_produces import_biographies import_cliplinks
+
 clean_staff: scripts/clean_staff.py
 	python scripts/clean_staff.py
 
@@ -28,6 +30,9 @@ clean_clip_links: scripts/clean_clip_links.py
 
 clean_countries: scripts/clean_countries.py
 	python scripts/clean_countries.py
+
+clean_associated: scripts/clean_associated.py
+	python scripts/clean_associated.py
 
 clean_genres: scripts/clean_genres.py
 	python scripts/clean_genres.py
@@ -64,6 +69,9 @@ import_produces: scripts/import_csv.py cleaned/produces_cleaned.csv
 
 import_biographies: scripts/import_csv.py cleaned/biographies_cleaned.csv
 	python scripts/import_csv.py cleaned/biographies_cleaned.csv biographies
+
+import_spouses: scripts/import_csv.py cleaned/spouses_cleaned.csv
+	python scripts/import_csv.py cleaned/spouses_cleaned.csv spouses
 
 import_cliplinks: scripts/import_csv.py cleaned/clip_links_cleaned.csv
 	python scripts/import_csv.py cleaned/clip_links_cleaned.csv cliplinks

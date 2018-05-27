@@ -8,16 +8,32 @@ const router = express.Router();
 const pool = new Pool(conn_info);
 
 router.get('/staff', (request, response, next) => {
-	const search = request.query.query;
-	if (!search) {
+	const query = request.query;
+	if (!query.text) {
 		response.status(400).send([]);
 		return;
 	}
 
-	const query = `SELECT * FROM MovieStaff WHERE LOWER(fullname) LIKE LOWER('%${search}%')`;
-	
-	pool.query(query, (err, result) => {
+	const exists = [];
+	if (query.actors == 'true') exists.push('EXISTS(SELECT 1 FROM acts WHERE acts.staffID = S.staffID)');
+	if (query.directors == 'true') exists.push('EXISTS(SELECT 1 FROM directs WHERE directs.staffID = S.staffID)');
+	if (query.producers == 'true') exists.push('EXISTS(SELECT 1 FROM produces WHERE produces.staffID = S.staffID)');
+	if (query.writers == 'true') exists.push('EXISTS(SELECT 1 FROM writes WHERE writes.staffID = S.staffID)');
+
+	// if none of the staffs is asked then no need to query anything => empty result
+	if (!exists.length) {
+		response.status(200).send([]);
+		return;
+	}
+
+	const queryString = `SELECT * FROM MovieStaff S
+		WHERE LOWER(fullname) LIKE LOWER('%${query.text}%')
+		AND (${exists.join(' OR ')})
+		LIMIT ${query.limit}`;
+
+	pool.query(queryString, (err, result) => {
 		if (err) {
+			console.log(queryString);
 			console.log(err);
 			response.status(400).send([]);
 		} else {
@@ -66,16 +82,51 @@ router.get('/staff/:staffid', (request, response, next) => {
 });
 
 router.get('/clip', (request, response, next) => {
-	const search = request.query.query;
-	if (!search) {
+	const query = request.query;
+	if (!query.text) {
 		response.status(400).send([]);
 		return;
 	}
 
-	const query = `SELECT * FROM Clips WHERE LOWER(ClipTitle) LIKE LOWER('%${search}%')`;
-	
-	pool.query(query, (err, result) => {
+	const innerJoins = [];
+	const conditions = [`LOWER(ClipTitle) LIKE LOWER('%${query.text}%')`];
+
+	if (query.type) {
+		if (query.type.length) {
+			conditions.push(`(${query.type.map(type => `cliptype = '${type}'`).join(' OR ')})`);
+		} else {
+			response.status(200).send([]);
+		}
+	}
+
+	if (query.bound_rating) {
+		innerJoins.push('INNER JOIN Ratings ON Clips.clipid = Ratings.clipid');
+		conditions.push(`Ratings.rank BETWEEN ${query.gt_rating} AND ${query.lt_rating}`);
+	}
+
+	if (query.genre) {
+		innerJoins.push('INNER JOIN Genres ON Clips.clipid = Genres.clipid');
+		conditions.push(`LOWER(Genres.genre) LIKE LOWER('%${query.genre}%')`);
+	}
+
+	if (query.language) {
+		innerJoins.push('INNER JOIN Languages ON Clips.clipid = Languages.clipid');
+		conditions.push(`LOWER(Languages.language) LIKE LOWER('%${query.language}%')`);
+	}
+
+	if (query.associated) {
+		innerJoins.push('INNER JOIN AssociatedCountries ON Clips.clipid =  AssociatedCountries.clipid');
+		conditions.push(`LOWER(AssociatedCountries.countryname) LIKE LOWER('%${query.associated}%')`);
+	}
+
+
+	const queryString = `SELECT * FROM Clips ${innerJoins.join(' ')}
+		WHERE ${conditions.join(' AND ')}
+		LIMIT ${query.limit}`;
+
+	pool.query(queryString, (err, result) => {
 		if (err) {
+			console.log(queryString);
 			console.log(err);
 			response.status(400).send([]);
 		} else {
@@ -136,6 +187,8 @@ router.get('/clip/:clipid', (request, response, next) => {
 			});
 		} else {
 			const {cliptype, clipyear} = results.clip.rows[0] || {};
+			console.log(cliptype);
+			console.log(results.clip.rows[0]);
 			response.status(200).json({
 				cliptype: cliptype,
 				clipyear: clipyear,

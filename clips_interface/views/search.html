@@ -1,10 +1,11 @@
+<!DOCTYPE HTML>
 <html>
 	<head>
 		<title>Clips</title>
 		<link rel="stylesheet" href="css/style.css">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 		<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
-		<script src='js/search.js'></script>
+		<script src='js/search.js' type='module'></script>
 	</head>
 
 	<body>
@@ -21,8 +22,56 @@
 		<!--search-->
 		<div id="content">
 			<div id="search">
-				<input type="text" placeholder="Search here">
-				<div id="search-button">Search</div>
+				<div id="search-bar">
+					<input id="search-text" type="text" placeholder="Search here">
+					<div id="search-button">Search</div>
+				</div>
+				<div id="search-options">
+					<div class="header">Advanced Options<i class="fas fa-angle-down"></i></div>
+					<div class="content">
+						<div class="node">
+							<input class="parent" id="checkbox_staff" type="checkbox" checked>Staff
+							<div class="leaf"><input id="checkbox_actors" type="checkbox" checked>Actors</div>
+							<div class="leaf"><input id="checkbox_directors" type="checkbox" checked>Directors</div>
+							<div class="leaf"><input id="checkbox_producers" type="checkbox" checked>Producers</div>
+							<div class="leaf"><input id="checkbox_writers" type="checkbox" checked>Writers</div>
+							<div class="leaf" style="padding-left: 5px">Number of results: <input id="staff_limit" type="text" value=25 size=2px></div>
+						</div>
+						<div class="node">
+							<input class="parent" id="checkbox_clips" type="checkbox" checked>Clips
+							<div class="leaf node">
+								<input class="parent" id="checkbox_type" type="checkbox">
+								Type
+								<div class="leaf"><input id="typeTV" type="checkbox">TV movie</div>
+								<div class="leaf"><input id="typeV" type="checkbox">Video movie</div>
+								<div class="leaf"><input id="typeVG" type="checkbox">Video game</div>
+							</div>
+							<div class="leaf">
+								<input id="checkbox_rating" type="checkbox">
+								Rating between
+								<input id="textgt_rating" type="text" size=3px placeholder="0">
+								and
+								<input id="textlt_rating" type="text" size=3px placeholder="10">
+							</div>
+							<div class="leaf">
+								<input id="checkbox_genre" type="checkbox">
+								Genre:
+								<input id="text_genre" type="text" size=10px>
+							</div>
+							<div class="leaf">
+								<input id="checkbox_language" type="checkbox">
+								Language:
+								<input id="text_language" type="text" size=10px>
+							</div>
+							<div class="leaf">
+								<input id="checkbox_associated" type="checkbox">
+								Associated country:
+								<input id="text_associated" type="text" size=10px>
+							</div>
+							<div class="leaf" style="padding-left: 5px">Number of results: <input id="clip_limit" type="text" value=25 size=2px></div>
+						</div>
+					</div>
+				</div>
 			</div>
 			<div id="search-results"></div>
 		</div>

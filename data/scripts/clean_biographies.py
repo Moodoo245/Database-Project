@@ -55,7 +55,7 @@ with open('initial/biographies.csv', encoding="utf8") as csvfile:
                     spouses = re.split("\|", row[8][1:-1])
                     for spouse in spouses:
                         pair = (staffid, spouse)
-                        if pair not in added_spouses:
+                        if spouse != '' and pair not in added_spouses:
                             wr_sp.writerow(pair)
                             added_spouses.add(pair)
 

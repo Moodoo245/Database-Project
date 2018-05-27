@@ -1,1 +1,1 @@
-DROP TABLE Acts, Writes, Produces, Directs, Genres, AssociatedCountries, Languages, RunningTimes, ReleaseDates, Ratings, Spouses, BiographicalBooks, Biographies, ClipLinks, Clips, MovieStaff;
+DROP TABLE Acts, Writes, Produces, Directs, Genres, Associated, Languages, PlayedFor, ReleasedIn, Ratings, Spouses, Books, Biographies, Nicknames, Salaries, ClipLinks, Clips, MovieStaff, Speaks, Classified, Country;

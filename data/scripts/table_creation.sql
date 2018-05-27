@@ -24,9 +24,9 @@ CREATE TABLE Biographies (
 CREATE TABLE Nicknames (
 	StaffId INT,
 	Nickname VARCHAR(128),
-	PRIMARY KEY (StaffId, Nickname)
+	PRIMARY KEY (StaffId, Nickname),
 	FOREIGN KEY (StaffId) REFERENCES MovieStaff ON DELETE CASCADE
-)	
+);	
 
 CREATE TABLE Salaries (
 	StaffId INT,
@@ -45,7 +45,7 @@ CREATE TABLE Books (
 
 CREATE TABLE Spouses (
 	StaffId INT,
-	Spouse VARCHAR(128),
+	Spouse TEXT,
 	PRIMARY KEY (StaffId, Spouse),
 	FOREIGN KEY (StaffId) REFERENCES MovieStaff ON DELETE CASCADE
 );
