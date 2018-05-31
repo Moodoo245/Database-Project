@@ -38,7 +38,7 @@ CREATE TABLE Salaries (
 	
 CREATE TABLE Books (
 	StaffId INT,
-	Book VARCHAR(128),
+	Book TEXT,
 	PRIMARY KEY (StaffId, Book),
 	FOREIGN KEY (StaffId) REFERENCES MovieStaff ON DELETE CASCADE
 );
