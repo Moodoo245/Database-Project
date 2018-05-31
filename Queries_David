@@ -34,7 +34,49 @@ WHERE R.ClipId IN(
 )
 
 j)
-###HARD AS FFFACK
+SELECT S.FullName
+FROM MovieStaff S
+WHERE S.StaffId IN(
+	SELECT A.StaffId
+	FROM Acts A
+	GROUP BY A.StaffId
+	HAVING COUNT(DISTINCT A.ClipId) > 100
+	AND (COUNT(DISTINCT A.ClipId)*0.6)  < 	(COUNT(DISTINCT A.ClipId)
+						WHERE A.ClipId IN(
+							SELECT C.ClipId
+							FROM Classified C
+							WHERE C.GenreId IN(
+								SELECT G.GenreId
+								FROM Genres G
+								WHERE G.Genre = "Short"
+							)
+							AND C.GenreId NOT IN(
+								SELECT G.GenreId
+								FROM Genres G
+								WHERE G.Genre = "Comedy" OR G.Genre = "Drama"
+							)
+						)) 
+	AND (	COUNT(DISTINCT A.ClipId)
+		WHERE A.ClipId IN(
+			SELECT C2.ClipId
+			FROM Classified C2
+			WHERE C2.GenreId IN(
+				SELECT G2.GenreId
+				FROM Genres G2
+				WHERE G2.Genre = "Drama"
+			)
+		)
+	)*2 < (	COUNT(DISTINCT A.ClipId)
+		WHERE A.ClipId IN(
+			SELECT C3.ClipId
+			FROM Classified C3
+			WHERE C3.GenreId IN(
+				SELECT G3.GenreId
+				FROM Genres G3
+				WHERE G3.Genre = "Comedy"
+			)
+		)
+)
 
 k)
 SELECT COUNT(DISTINCT C.ClipId)
