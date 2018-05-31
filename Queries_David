@@ -1,0 +1,88 @@
+g)
+SELECT S.FullName
+FROM MovieStaff S
+WHERE S.StaffId IN(
+	SELECT W.StaffId
+	FROM Writes W, Produces P
+	WHERE W.WorkType = "screenplay"
+	AND(	SELECT COUNT(DISTINCT P.ClipId)
+		FROM Produces P
+		WHERE W.ClipId = P.ClipId
+	) > 2
+)
+
+h)
+SELECT AVG(Rank)
+FROM Ratings
+NATURAL JOIN Acts
+WHERE OrdersCredit <= 3
+GROUP BY StaffId
+
+i)
+SELECT AVG(R.Rank)
+FROM Ratings R
+WHERE R.ClipId IN(
+	SELECT C.ClipId
+	FROM Classified C
+	WHERE C.GenreId IN(
+		SELECT G.GenreId
+		FROM Genres G
+		GROUP BY G.GenreId	
+		ORDER BY COUNT(*) DESC
+		LIMIT 1
+	)
+)
+
+j)
+###HARD AS FFFACK
+
+k)
+SELECT COUNT(DISTINCT C.ClipId)
+FROM Clip C
+WHERE C.ClipId IN(
+	SELECT C2.ClipId
+	FROM Classified C2
+	WHERE C2.GenreId IN(
+		SELECT G.GenreId
+		FROM Genres G
+		GROUP BY G.GenreId
+		ORDER BY COUNT(*) DESC
+		LIMIT 1 OFFSET 1 
+	)
+	AND C2.ClipId IN(
+		SELECT S.ClipId
+		FROM Speaks S
+		WHERE S.LanguageId IN(
+			SELECT L.LanguageId
+			FROM Languages L
+			WHERE L.Language = "Dutch"
+		)
+	)
+)
+
+l)
+SELECT M.FullName
+FROM MovieStaff M
+WHERE M.StaffId IN(
+	SELECT P.StaffId
+	FROM Produces P
+	WHERE P.Role = "coordinating producer"
+	AND P.StaffId IN(
+		SELECT P2.StaffId
+		FROM Produces P2
+		WHERE P2.ClipId IN(
+			SELECT C.ClipId
+			FROM Classified C
+			WHERE C.GenreId IN(
+				SELECT C2.GenreId
+				FROM Classified C2
+				GROUP BY C2.GenreId
+				ORDER BY COUNT(*) DESC
+				LIMIT 1
+			)
+		)
+		GROUP BY P2.StaffId
+		ORDER BY COUNT(*) DESC
+		LIMIT 1
+	)
+)
