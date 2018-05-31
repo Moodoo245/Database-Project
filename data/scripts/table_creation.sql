@@ -38,7 +38,7 @@ CREATE TABLE Salaries (
 	
 CREATE TABLE Books (
 	StaffId INT,
-	Book VARCHAR(128),
+	Book TEXT,
 	PRIMARY KEY (StaffId, Book),
 	FOREIGN KEY (StaffId) REFERENCES MovieStaff ON DELETE CASCADE
 );
@@ -51,7 +51,7 @@ CREATE TABLE Spouses (
 );
 
 CREATE TABLE Clips (
-	ClipId INT,
+	ClipId SERIAL,
 	ClipTitle TEXT,
 	ClipYear INT,
 	ClipType VARCHAR(64),
@@ -118,7 +118,7 @@ CREATE TABLE Ratings (
 );
 
 CREATE TABLE Languages (
-	LanguageId INT,
+	LanguageId SERIAL,
 	Language VARCHAR(64),
 	PRIMARY KEY (LanguageId)
 );
@@ -132,7 +132,7 @@ CREATE TABLE Speaks (
 );
 
 CREATE TABLE Genres (
-	GenreId INT,
+	GenreId SERIAL,
 	Genre VARCHAR(32),
 	PRIMARY KEY (GenreId)
 );
@@ -146,14 +146,14 @@ CREATE TABLE Classified (
 );
 
 CREATE TABLE Country (
-	CountryId INT,
+	CountryId SERIAL,
 	CountryName VARCHAR(64),
 	PRIMARY KEY (CountryId)
 );
 
 CREATE TABLE ReleasedIn (
-	CountryId INT,
 	ClipId INT,
+	CountryId INT,
 	ReleaseDate TEXT,
 	PRIMARY KEY (CountryId, ClipId),
 	FOREIGN KEY (CountryId) REFERENCES Country ON DELETE CASCADE,
@@ -161,16 +161,16 @@ CREATE TABLE ReleasedIn (
 );
 
 CREATE TABLE Associated (
-	CountryId INT,
 	ClipId INT,
+	CountryId INT,
 	PRIMARY KEY (CountryId, ClipId),
 	FOREIGN KEY (CountryId) REFERENCES Country ON DELETE CASCADE,
 	FOREIGN KEY (ClipId) REFERENCES Clips ON DELETE CASCADE
 );
 
 CREATE TABLE PlayedFor (
-	CountryId INT,
 	ClipId INT,
+	CountryId INT,
 	RunningTime INT,
 	PRIMARY KEY (CountryId, ClipId),
 	FOREIGN KEY (CountryId) REFERENCES Country ON DELETE CASCADE,
