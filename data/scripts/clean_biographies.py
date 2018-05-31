@@ -43,12 +43,17 @@ with open('initial/biographies.csv', encoding="utf8") as csvfile:
                 wr_bio.writerow(new_row)
                 added.add(staffid)
 
-                if len(row[12]) > 0:
+                if len(row[12]) > 0 and row[12].lower() != 'null':
+
                     salaries = re.split("\|", row[12][1:-1])
+
                     for salary in salaries:
-                        pair = (staffid, salary)
+                        s = re.split("->", salary)
+                        if len(s) < 2:
+                            s = ['EMPTY', s[0]]
+                        pair = (staffid, s[1])
                         if pair not in added_salaries:
-                            wr_sa.writerow(pair)
+                            wr_sa.writerow((staffid, s[1].strip(), utils.alet(s[0])))
                             added_salaries.add(pair)
 
                 if len(row[8]) > 0:
@@ -62,18 +67,20 @@ with open('initial/biographies.csv', encoding="utf8") as csvfile:
                 if len(row[10]) > 0:
                     books = re.split("\|", row[10][1:-1])
                     for book in books:
-                        pair = (staffid, book)
-                        if pair not in added_books:
-                            wr_book.writerow(pair)
-                            added_books.add(pair)
-            
+                        if len(book) != 0 and book.lower() != 'null':
+                            pair = (staffid, book)
+                            if pair not in added_books:
+                                wr_book.writerow(pair)
+                                added_books.add(pair)
+
                 if len(row[2]) > 0:
                     nicknames = re.split("\|", row[2][1:-1])
                     for nickname in nicknames:
-                        pair = (staffid, nickname)
-                        if pair not in added_nicks:
-                            wr_nick.writerow(pair)
-                            added_nicks.add(pair)
+                        if len(nickname) != 0 and nickname.lower() != 'null':
+                            pair = (staffid, nickname)
+                            if pair not in added_nicks:
+                                wr_nick.writerow(pair)
+                                added_nicks.add(pair)
     bio.close()
     sp.close()
     booksf.close()
