@@ -1,4 +1,4 @@
-all: delete clean
+all: delete clean import
 
 clean: clean_staff clean_clips clean_acts clean_writes clean_directs clean_produces clean_biographies clean_clip_links clean_countries clean_associated clean_genres clean_languages clean_ratings clean_releasedates clean_runningtimes
 

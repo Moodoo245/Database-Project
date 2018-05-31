@@ -50,4 +50,6 @@ with open('initial/genres.csv', encoding="utf8") as csvfile:
                 b = utils.lettres(l)
                 if b in genres:
                     new_row = (clipid, genre_map[b])
-                    wr.writerow(new_row)
+                    if new_row not in added:
+                        wr.writerow(new_row)
+                        added.add(new_row)

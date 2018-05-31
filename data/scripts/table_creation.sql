@@ -152,8 +152,8 @@ CREATE TABLE Country (
 );
 
 CREATE TABLE ReleasedIn (
-	CountryId INT,
 	ClipId INT,
+	CountryId INT,
 	ReleaseDate TEXT,
 	PRIMARY KEY (CountryId, ClipId),
 	FOREIGN KEY (CountryId) REFERENCES Country ON DELETE CASCADE,
@@ -161,16 +161,16 @@ CREATE TABLE ReleasedIn (
 );
 
 CREATE TABLE Associated (
-	CountryId INT,
 	ClipId INT,
+	CountryId INT,
 	PRIMARY KEY (CountryId, ClipId),
 	FOREIGN KEY (CountryId) REFERENCES Country ON DELETE CASCADE,
 	FOREIGN KEY (ClipId) REFERENCES Clips ON DELETE CASCADE
 );
 
 CREATE TABLE PlayedFor (
-	CountryId INT,
 	ClipId INT,
+	CountryId INT,
 	RunningTime INT,
 	PRIMARY KEY (CountryId, ClipId),
 	FOREIGN KEY (CountryId) REFERENCES Country ON DELETE CASCADE,
