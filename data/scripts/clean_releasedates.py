@@ -18,14 +18,14 @@ with open('initial/release_dates.csv', encoding="utf8") as csvfile:
             if row[0] in clips:
                 clipid = row[0]
                 no_accents = utils.acc(row[1])
-                only_letters = utils.lettres(no_accents)
-                null_to_empty_string = utils.null_to_empty_string(only_letters)
+                only_letters = utils.lettres(no_accents).lstrip()
+
                 # Only keep the numbers and the letters in the "ReleaseDate" column
                 only_numbers_letters = utils.alet(row[2])
 
-                if null_to_empty_string in country_map:
-                    countryId = country_map[null_to_empty_string]
+                if only_letters in country_map:
+                    countryId = country_map[only_letters]
                     new_row = (clipid, countryId)
-                    if len(null_to_empty_string) != 0 and null_to_empty_string.lower() != 'null' and new_row not in added:
-                        wr.writerow((clipid, countryId, null_to_empty_string, only_numbers_letters))
+                    if new_row not in added:
+                        wr.writerow((clipid, countryId, only_numbers_letters))
                         added.add(new_row)
