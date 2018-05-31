@@ -2,7 +2,7 @@ all: delete clean
 
 clean: clean_staff clean_clips clean_acts clean_writes clean_directs clean_produces clean_biographies clean_clip_links clean_countries clean_associated clean_genres clean_languages clean_ratings clean_releasedates clean_runningtimes
 
-import: import_staff import_clips import_acts import_writes import_directs import_produces import_biographies import_cliplinks
+import: import_staff import_clips import_acts import_writes import_directs import_produces import_biographies import_books import_spouses import_nicknames import_salaries import_cliplinks import_countries import_associated import_genres import_classified import_languages import_speaks import_ratings import_releasedin import_playedfor
 
 clean_staff: scripts/clean_staff.py
 	python scripts/clean_staff.py
