@@ -51,7 +51,7 @@ CREATE TABLE Spouses (
 );
 
 CREATE TABLE Clips (
-	ClipId INT,
+	ClipId SERIAL,
 	ClipTitle TEXT,
 	ClipYear INT,
 	ClipType VARCHAR(64),
@@ -118,7 +118,7 @@ CREATE TABLE Ratings (
 );
 
 CREATE TABLE Languages (
-	LanguageId INT,
+	LanguageId SERIAL,
 	Language VARCHAR(64),
 	PRIMARY KEY (LanguageId)
 );
@@ -132,7 +132,7 @@ CREATE TABLE Speaks (
 );
 
 CREATE TABLE Genres (
-	GenreId INT,
+	GenreId SERIAL,
 	Genre VARCHAR(32),
 	PRIMARY KEY (GenreId)
 );
@@ -146,7 +146,7 @@ CREATE TABLE Classified (
 );
 
 CREATE TABLE Country (
-	CountryId INT,
+	CountryId SERIAL,
 	CountryName VARCHAR(64),
 	PRIMARY KEY (CountryId)
 );
