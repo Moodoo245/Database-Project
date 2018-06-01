@@ -1,0 +1,77 @@
+A) Print the names of the top 10 actors ranked by the average rating of their 3 highest rated clips that where voted by at least 100 people. The actors must have had a role in at least 5 clips (not necessarily rated)
+
+select D.names
+from    (select * 
+	from (select * 
+		from actors 
+		group by clipId 
+		having count(clipId) > 5) A 
+	natural join clips c) D 
+natural join (select * from rankings where votes >= 100) r 
+FUCKFUCKFUCKFUCKFUCKFUCKFUCK
+limit 10
+
+B)Compute the average rating of the top- 100 rated clips per de cade in decreasing order
+
+select avg(R.rank)
+from ratings R NATURAL JOIN (select clipId, (floor(ClipYear/10) *10) as decade
+				from clips) t
+group by (decade)
+ORDER BY R.rank desc LIMIT 100
+
+
+C) For any video game director, print the first year he/she directed a game, his/her name and all his/her game titles from that year
+
+
+select C.clipYear, S.fullname, C.clipTitle
+from clips C, directs D, moviestaff S
+where c.clipType = 'VG' and c.clipId = d.clipId 
+and s.staffid = d.staffid 
+and C.clipYear in (select MIN(Cl.clipYear) 
+		from clips cl, directs di 
+		where cl.clipType = 'VG' and di.clipId = cl.clipId 
+		group by di.staffid)
+
+
+D) For each year, print the title, year and rank-in-year of top 3 clips, based on their ranking
+	
+	select c.clipTitle, R.rank, c.clipYear
+	from ratings R, clips C
+	Order by R.rank desc
+	having r.clipId = c.clipId
+	limit 3
+	group by c.clipYear
+
+E) Print the  names  of all  directors  who  have  also  written  scripts  for  clips,  in  all  of  which  they  were additionally  actors  (but  not  necessarily  directors)  and  every  clip  they  directed  has  at  least  two  more points in ranking than any clip they wrote
+
+print d.name
+from (directs D 
+	left outer join 
+	ratings R 
+	on D.ClipId = R.ClipId) D
+left outer join 
+	(acts 
+	inner join 
+	(writes W 
+	left outer join 
+	ratings R 
+	on W.clipId = R.clipId) A 
+on D.staffId = A.staffId
+WHERE D.rank - MAX(A.rank) >= 2.0
+
+F) Print the names of the actors that are not married and have participated in more than 2 clips that they both acted in and co-directed it
+
+select BA1.name, BA2.name
+from (SELECT A.*
+    FROM actors A
+	LEFT JOIN spouses S ON S.staffid = A.staffid
+    WHERE S.staffid IS NULL) BA1, 
+	(SELECT A.*
+    FROM actors A
+	LEFT JOIN spouses S ON S.staffid = A.staffid
+    WHERE S.staffid IS NULL) BA2
+where BA1.staffid != BA2.staffid
+
+manque la partie sur 2 clips et codirect
+
+
