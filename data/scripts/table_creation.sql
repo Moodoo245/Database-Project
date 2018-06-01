@@ -30,7 +30,7 @@ CREATE TABLE Nicknames (
 
 CREATE TABLE Salaries (
 	StaffId INT,
-	Salary INT,
+	Salary VARCHAR(256),
 	Employer VARCHAR(128),
 	PRIMARY KEY (StaffId, Salary),
 	FOREIGN KEY (StaffId) REFERENCES MovieStaff ON DELETE CASCADE

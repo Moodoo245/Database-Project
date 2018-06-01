@@ -56,3 +56,15 @@ with open('cleaned/staff_cleaned.csv', 'w', encoding='utf8') as fout, \
                 staff_map.writerow((name, staffid))
                 added.add(name)
                 staffid += 1
+
+    # Add the biography men
+    with open('initial/biographies.csv', 'r', encoding='utf8') as fdata:
+        read = csv.reader(fdata)
+        next(read)
+        for row in read:
+            name = utils.lettres(row[0]).lstrip()
+            if name.lower() != 'null' and name not in added:
+                out.writerow((staffid, name))
+                staff_map.writerow((name, staffid))
+                added.add(name)
+                staffid += 1
