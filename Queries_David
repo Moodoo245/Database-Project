@@ -1,3 +1,76 @@
+#Deliverable 2
+a)
+SELECT C.ClipTitle, P.RunningTime
+FROM Clip C
+NATURAL JOIN PlayedFor P
+NATURAL JOIN Country C2
+WHERE C2.CountryName = "France"
+GROUP BY C2.CountryId
+ORDER BY P.RunningTime DESC
+LIMIT 10
+
+b)
+SELECT COUNT(DISTINCT R.ClipId)
+FROM ReleasedIn R
+WHERE R.ReleaseDate LIKE '2001'
+GROUP BY R.CountryId
+
+c)
+SELECT COUNT(DISTINCT R.ClipId)
+FROM Classified C
+NATURAL JOIN ReleasedIn R
+NATURAL JOIN Country C2
+WHERE C2.CountryName = "USA"
+AND (	R.ReleaseDate LIKE '2014'
+	OR R.ReleaseDate LIKE '2015' 
+	OR R.ReleaseDate LIKE '2016'
+	OR R.ReleaseDate LIKE '2017'
+	OR R.ReleaseDate LIKE '2018')
+GROUP BY C.GenreId
+
+d)
+SELECT S.FullName
+FROM MovieStaff S
+NATURAL JOIN Acts A
+GROUP BY S.StaffId
+ORDER BY COUNT(DISTINCT A.ClipId) DESC
+LIMIT 1
+
+e)
+SELECT COUNT(DISTINCT D.ClipId)
+FROM Directs D
+GROUP BY D.StaffId
+ORDER BY COUNT(DISTINCT D.ClipId) DESC
+LIMIT 1
+
+f)
+SELECT S.FullName 
+FROM Writes W
+LEFT JOIN Produces P ON W.StaffId = P.StaffId
+LEFT JOIN Directs D ON W.StaffId = D.StaffId
+LEFT JOIN Acts A ON W.StaffId = A.StaffId
+WHERE  ...
+GROUP BY S.StaffId
+
+g)
+SELECT L.Language
+FROM Speaks S
+NATURAL JOIN Languages L
+GROUP BY S.LanguageId
+ORDER BY COUNT(DISTINCT S.ClipId) DESC
+LIMIT 10
+
+h)
+SELECT S.FullName
+FROM Acts A
+NATURAL JOIN MovieStaff S
+NATURAL JOIN Clip C
+WHERE C.ClipType = 'V'
+GROUP BY S.StaffId
+ORDER BY COUNT(DISTINCT A.ClipId) DESC
+LIMIT 1
+
+#Deliverable 3
 g)
 SELECT S.FullName
 FROM MovieStaff S
