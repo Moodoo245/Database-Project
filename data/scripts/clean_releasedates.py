@@ -19,6 +19,8 @@ with open('initial/release_dates.csv', encoding="utf8") as csvfile:
                 clipid = row[0]
                 no_accents = utils.acc(row[1])
                 only_letters = utils.lettres(no_accents).lstrip()
+                if only_letters == 'Democratic Republic of Congo':
+                    only_letters = 'Democratic Republic of the Congo'
 
                 # Only keep the numbers and the letters in the "ReleaseDate" column
                 only_numbers_letters = utils.alet(row[2])

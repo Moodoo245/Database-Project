@@ -18,6 +18,8 @@ with open('cleaned/countries_cleaned.csv', 'w', encoding='utf8') as fout, \
         next(read)
         for row in read:
             name = utils.lettres(utils.acc(row[1])).lstrip()
+            if name == 'Democratic Republic of Congo':
+                name = 'Democratic Republic of the Congo'
             if name.lower() != 'null' and len(name) > 0 and name not in added:
                 out.writerow((countryId, name))
                 country_map.writerow((name, countryId))
@@ -30,6 +32,10 @@ with open('cleaned/countries_cleaned.csv', 'w', encoding='utf8') as fout, \
         next(read)
         for row in read:
             name = utils.lettres(utils.acc(row[1])).lstrip()
+            if name == 'Democratic Republic of Congo':
+                name = 'Democratic Republic of the Congo'
+            if name == 'None':
+                name = ''
             if name.lower() != 'null' and len(name) > 0 and name not in added:
                 out.writerow((countryId, name))
                 country_map.writerow((name, countryId))
@@ -42,6 +48,8 @@ with open('cleaned/countries_cleaned.csv', 'w', encoding='utf8') as fout, \
         next(read)
         for row in read:
             name = utils.lettres(utils.acc(row[1])).lstrip()
+            if name == 'Democratic Republic of Congo':
+                name = 'Democratic Republic of the Congo'
             if name.lower() != 'null' and len(name) > 0 and name not in added:
                 out.writerow((countryId, name))
                 country_map.writerow((name, countryId))

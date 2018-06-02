@@ -19,6 +19,10 @@ with open('initial/running_times.csv', encoding="utf8") as csvfile:
                 clipid = row[0]
                 no_accents = utils.acc(row[1])
                 only_letters = utils.lettres(no_accents).lstrip()
+                if only_letters == 'Democratic Republic of Congo':
+                    only_letters = 'Democratic Republic of the Congo'
+                if only_letters == 'None':
+                    only_letters = ''
 
                 # Only keep the numbers in the "RunningTime" column
                 only_numbers = utils.numbers(row[2])

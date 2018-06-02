@@ -65,7 +65,7 @@ with open('initial/biographies.csv', encoding="utf8") as csvfile:
                             added_spouses.add(pair)
 
                 if len(row[10]) > 0:
-                    books = re.split("\|", row[10][1:-1])
+                    books = re.split("\.\|", row[10][1:-1])
                     for book in books:
                         if len(book) != 0 and book.lower() != 'null':
                             pair = (staffid, book)

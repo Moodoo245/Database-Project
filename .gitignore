@@ -1,4 +1,4 @@
 data/initial
 data/cleaned
+data/scripts/pg_vars.sh
 __pycache__
-scripts/pg_vars.sh

@@ -21,6 +21,8 @@ with open('initial/languages.csv', encoding="utf8") as csvfile:
                 language = row[1]
                 l = utils.acc(language)
                 b = utils.lettres(l)
+                if b == 'some dialogue with English subtitles some without':
+                    b = 'English'
 
                 if utils.diff_letters(l, b) < 2 and len(b) != 0 and b.lower() != 'null' and b.lower() != 'none':
                     if b not in languages:
@@ -49,6 +51,8 @@ with open('initial/languages.csv', encoding="utf8") as csvfile:
                 language = row[1]
                 l = utils.acc(language)
                 b = utils.lettres(l)
+                if b == 'some dialogue with English subtitles some without':
+                    b = 'English'
                 if b in languages:
                     new_row = (clipid, language_map[b])
                     if new_row not in added:
