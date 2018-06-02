@@ -48,6 +48,10 @@ const sdirects_query = 'SELECT directs.*, clips.cliptitle FROM directs INNER JOI
 const sproduces_query = 'SELECT produces.*, clips.cliptitle FROM produces INNER JOIN clips ON produces.clipid = clips.clipid WHERE staffid = $1';
 const swrites_query = 'SELECT writes.*, clips.cliptitle FROM writes INNER JOIN clips ON writes.clipid = clips.clipid WHERE staffid = $1';
 const bio_query = 'SELECT * FROM biographies bio WHERE staffid = $1';
+const spouses_query = 'SELECT spouse FROM spouses WHERE staffid = $1';
+const nicknames_query = 'SELECT nickname FROM nicknames WHERE staffid = $1';
+const books_query = 'SELECT book FROM books WHERE staffid = $1';
+const salaries_query = 'SELECT employer, salary FROM salaries WHERE staffid = $1';
 
 router.get('/staff/:staffid', (request, response, next) => {
 	const staffid = request.params.staffid;
@@ -58,6 +62,10 @@ router.get('/staff/:staffid', (request, response, next) => {
 		produces: callback => pool.query(sproduces_query, [staffid], callback),
 		writes: callback => pool.query(swrites_query, [staffid], callback),
 		bio: callback => pool.query(bio_query, [staffid], callback),
+		spouses: callback => pool.query(spouses_query, [staffid], callback),
+		nicknames: callback => pool.query(nicknames_query, [staffid], callback),
+		books: callback => pool.query(books_query, [staffid], callback),
+		salaries: callback => pool.query(salaries_query, [staffid], callback),
 	};
 
 	async.parallel(tasks, (err, results) => {
@@ -68,6 +76,10 @@ router.get('/staff/:staffid', (request, response, next) => {
 				produces: [],
 				writes: [],
 				bio: null,
+				spouses: [],
+				nicknames: [],
+				books: [],
+				salaries: [],
 			});
 		} else {
 			response.status(200).json({
@@ -76,6 +88,10 @@ router.get('/staff/:staffid', (request, response, next) => {
 				produces: results.produces.rows,
 				writes: results.writes.rows,
 				bio: results.bio.rows[0],
+				spouses: results.spouses.rows.map(row => row.spouse),
+				nicknames: results.nicknames.rows.map(row => row.nickname),
+				books: results.books.rows.map(row => row.book),
+				salaries: results.salaries.rows.map(row => `${row.employer}: ${row.salary}`),
 			});	
 		}
 	});
@@ -104,25 +120,24 @@ router.get('/clip', (request, response, next) => {
 		conditions.push(`Ratings.rank BETWEEN ${query.gt_rating} AND ${query.lt_rating}`);
 	}
 
-	if (query.genre) {
-		innerJoins.push('INNER JOIN Genres ON Clips.clipid = Genres.clipid');
-		conditions.push(`LOWER(Genres.genre) LIKE LOWER('%${query.genre}%')`);
+	if (query.genreId) {
+		innerJoins.push('INNER JOIN Classified ON Clips.clipid = Classified.clipid');
+		conditions.push(`Classified.genreid = ${query.genreId}`);
 	}
 
-	if (query.language) {
-		innerJoins.push('INNER JOIN Languages ON Clips.clipid = Languages.clipid');
-		conditions.push(`LOWER(Languages.language) LIKE LOWER('%${query.language}%')`);
+	if (query.languageId) {
+		innerJoins.push('INNER JOIN Speaks ON Clips.clipid = Speaks.clipid');
+		conditions.push(`Speaks.languageid = ${query.languageId}`);
 	}
 
-	if (query.associated) {
-		innerJoins.push('INNER JOIN AssociatedCountries ON Clips.clipid =  AssociatedCountries.clipid');
-		conditions.push(`LOWER(AssociatedCountries.countryname) LIKE LOWER('%${query.associated}%')`);
+	if (query.associatedCountryId) {
+		innerJoins.push('INNER JOIN Associated ON Clips.clipid = Associated.clipid');
+		conditions.push(`Associated.countryid = ${query.associatedCountryId}`);
 	}
 
+	const queryString = `SELECT * FROM Clips ${innerJoins.join(' ')} WHERE ${conditions.join(' AND ')} LIMIT ${query.limit}`;
 
-	const queryString = `SELECT * FROM Clips ${innerJoins.join(' ')}
-		WHERE ${conditions.join(' AND ')}
-		LIMIT ${query.limit}`;
+	console.log(queryString);
 
 	pool.query(queryString, (err, result) => {
 		if (err) {
@@ -138,11 +153,11 @@ router.get('/clip', (request, response, next) => {
 // prepared clip queries
 const clip_query = 'SELECT cliptype, clipyear FROM clips WHERE clipid = $1';
 const ratings_query = 'SELECT rank, votes FROM ratings WHERE clipid = $1';
-const genres_query = 'SELECT genre FROM genres WHERE clipid = $1';
-const languages_query = 'SELECT language FROM languages WHERE clipid = $1';
-const associatedcountries_query = 'SELECT countryname FROM associatedcountries WHERE clipid = $1';
-const releasedates_query = 'SELECT releasecountry, releasedate FROM releasedates WHERE clipid = $1';
-const runningtimes_query = 'SELECT releasecountry, runningtime FROM runningtimes WHERE clipid = $1';
+const genres_query = 'SELECT genre FROM genres INNER JOIN classified ON genres.genreid = classified.genreid WHERE clipid = $1';
+const languages_query = 'SELECT language FROM languages INNER JOIN speaks ON languages.languageid = speaks.languageid WHERE clipid = $1';
+const associatedcountries_query = 'SELECT countryname FROM associated INNER JOIN country ON associated.countryid = country.countryid WHERE clipid = $1';
+const releasedates_query = 'SELECT countryname, releasedate FROM releasedin INNER JOIN country ON releasedin.countryid = country.countryid WHERE clipid = $1';
+const runningtimes_query = 'SELECT countryname, runningtime FROM playedfor INNER JOIN country ON playedfor.countryid = country.countryid WHERE clipid = $1';
 const cliplinks_query = 'SELECT cliptitle, linktype FROM cliplinks INNER JOIN clips ON clipto = clipid WHERE clipfrom = $1';
 const cacts_query = 'SELECT acts.*, S.fullname FROM acts INNER JOIN moviestaff S ON acts.staffid = S.staffid WHERE clipid = $1';
 const cdirects_query = 'SELECT directs.*, S.fullname FROM directs INNER JOIN moviestaff S ON directs.staffid = S.staffid WHERE clipid = $1';

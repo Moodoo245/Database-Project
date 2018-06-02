@@ -164,6 +164,12 @@ input[type=text]:disabled {
 	margin-left: 8px;
 }
 
+.result-table .result-row > .id {
+	float: right;
+	margin-left: 8px;
+	opacity: 0.6;
+}
+
 .more-info {
 	border-top: 1px solid #bbbbbb;
 	margin-top: 5px;
@@ -171,20 +177,37 @@ input[type=text]:disabled {
 	display: none;
 	max-height: 500px;
 	overflow-y: auto;
+	position: relative;
+}
+
+.delete-button {
+	float: right; 
+	color: white;
+	margin-left: 10px;
+	padding: 5px;
+	border-radius: 3px;
+	background-color: salmon;
+}
+
+.delete-button:hover {
+	background-color: red;
 }
 
 .more-info .property {
 	margin: 2px 0px;
+	padding-left: 20px;
+	text-indent: -20px;
+	text-align: justify;
 }
 
-.more-info .property > h4 {
+.more-info .property_list > h4 {
 	padding: 0px;
 	margin: 0px;
 }
 
-.more-info .property > ul {
-	padding-left: 25px;
+.more-info .property_list > ul {
 	margin: 2px 0px;
+	padding-left: 25px;
 }
 
 .loader {

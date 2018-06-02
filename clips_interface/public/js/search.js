@@ -33,6 +33,9 @@ $(() => {
 	const textbox = $('#search-text');
 	const search_results = $('#search-results');
 	const loader = div('loader'); // loader icon
+	const audio = document.createElement('audio');
+	audio.setAttribute('src', '/audio/cena_song.mp3');
+	audio.loop = true;
 
 	function searchable(name) {
 		const elem = span('clickable').text(name);
@@ -57,6 +60,22 @@ $(() => {
 		if (e.which == ENTER_KEYCODE) {
 			search_button.click();
 		}
+	});
+
+
+	$.get('/db/languages').done((result) => {
+		$('#select_language').append(result.sort((l,r) => l.language.localeCompare(r.language))
+				.map(row => $(`<option value="${row.languageid}">${row.language}</option>`)));
+	});
+
+	$.get('/db/genres').done((result) => {
+		$('#select_genre').append(result.map(row =>
+			$(`<option value="${row.genreid}">${row.genre}</option>`)));
+	});
+
+	$.get('/db/countries').done((result) => {
+		$('#select_associated').append(result.map(row =>
+			$(`<option value="${row.countryid}">${row.countryname}</option>`)));
 	});
 
 	search_button.click(async () => {
@@ -95,11 +114,12 @@ $(() => {
 				clip_query_msg.lt_rating = lt_rating == '' || isNaN(Number(lt_rating)) ? 10 : Number(lt_rating);
 			}
 			if ($('#checkbox_genre').prop('checked'))
-				clip_query_msg.genre = $('#text_genre').val();
+				clip_query_msg.genreId = $('#select_genre').val();
 			if ($('#checkbox_language').prop('checked'))
-				clip_query_msg.language = $('#text_language').val();
+				clip_query_msg.languageId = $('#select_language').val();
 			if ($('#checkbox_associated').prop('checked'))
-				clip_query_msg.associated = $('#text_associated').val();
+				clip_query_msg.associatedCountryId = $('#select_associated').val();
+
 			q_clip = $.get('db/search/clip', clip_query_msg);
 		} else q_clip = [];
 
@@ -125,6 +145,7 @@ $(() => {
 
 			const arrow = $('<i class="fas fa-angle-down"></i>');
 			staff_result.append(arrow);
+			staff_result.append(div('id').text(staff.staffid));
 
 			const more_info = div('more-info');
 			staff_result.append(more_info);
@@ -133,13 +154,14 @@ $(() => {
 
 			staff_result.click(() => {
 				arrow.toggleClass('fa-angle-down fa-angle-up');
-				if (fetched_infos) {
+				if (staff.fullname == 'Cena John') {
+					audio.paused ? audio.play() : audio.pause();
+				}
+				if (loader) {
 					more_info.slideToggle();
 				} else {
-					if (!loader) {
-						loader = div('loader');
-						more_info.append(loader);
-					}
+					loader = div('loader');
+					more_info.append(loader);
 					more_info.show();
 					loader.fadeIn(200);
 
@@ -149,7 +171,49 @@ $(() => {
 						loader.remove();
 						more_info.hide();
 
-						const {acts, directs, produces, writes, bio} = result;
+						const {acts, directs, produces, writes, bio, nicknames, spouses, salaries, books} = result;
+
+						const elems = [];
+
+						const delete_button = div('fa', 'fa-trash', 'delete-button');
+						delete_button.click((e) => {
+							e.stopImmediatePropagation();
+							if (confirm(`Do you really want to delete ${staff.fullname}`)) {
+								$.ajax({
+									url: 'db/staff/' + staff.staffid,
+									type: 'DELETE',
+									success: res => {
+										alert(`${staff.fullname} has been deleted`);
+										staff_result.remove();
+									},
+								});
+							}
+						})
+						elems.push(delete_button);
+
+						if (bio) {
+							const {realname, dateandplaceofbirth, height, biography, biographer,
+								   dateandcauseofdeath, trivia, personalquotes, trademark,
+								   wherearetheynow} = bio;
+							if (realname) elems.push(property('Real name', [realname]));
+							if (nicknames.length > 0) elems.push(property(nicknames.length == 1? 'Nickname': 'Nicknames', nicknames));
+							if (dateandplaceofbirth) elems.push(property('Birth', [dateandplaceofbirth]));
+							if (dateandcauseofdeath) elems.push(property('Death', [dateandcauseofdeath]));
+							if (spouses.length > 0) elems.push(property(spouses.length == 1? 'Spouse': 'Spouses', spouses));
+							if (height) elems.push(property('Height', [height]));
+							if (biography) {
+								var text = biography;
+								if (biographer) text += ` (Biography written by ${biographer})`
+								elems.push(property('Biography', [text]));
+							}
+							if (personalquotes) elems.push(property('Personal Quotes', [personalquotes]));
+							if (trademark) elems.push(property('Trademark', [trademark]));
+							if (trivia) elems.push(property('Trivia', [trivia]));
+							if (wherearetheynow) elems.push(property('Present situation', [wherearetheynow]));
+						} else {
+							if (nicknames.length > 0) elems.push(property(nicknames.length == 1? 'Nickname': 'Nicknames', nicknames));
+							if (spouses.length > 0) elems.push(property(spouses.length == 1? 'Spouse': 'Spouses', spouses));
+						}
 
 						if (acts.length > 0) {
 							const prep_acts = acts.map(row => {
@@ -161,52 +225,54 @@ $(() => {
 								return clip;
 							});
 							
-							more_info.append(property_list('Played in', prep_acts));
+							elems.push(property_list('Played in', prep_acts));
 						}
 						
 						if (directs.length > 0) {
 							const prep_directs = directs.map(row => {
-								const {cliptitle, char, addinfos} = row;
+								const {cliptitle, role, addinfos} = row;
 								const ctitle = searchable(cliptitle);
 								const clip = [ctitle];
-								if (char) clip.push(' as ' + char);
+								if (role) clip.push(' as ' + role);
 								if (addinfos) clip.push(' (' + addinfos + ')');
 								return clip;
 							});
 
-							more_info.append(property_list('Directed', prep_directs));
+							elems.push(property_list('Directed', prep_directs));
 						}
 
 						if (produces.length > 0) {
 							const prep_produces = produces.map(row => {
-								const {cliptitle, addinfos, role} = row;
+								const {cliptitle, role, addinfos} = row;
 								const ctitle = searchable(cliptitle);
 								const clip = [ctitle];
-								if (addinfos) clip.push(' as a ' + addinfos);
-								if (role) clip.push(' (' + role + ')');
+								if (role) clip.push(' as a ' + role);
+								if (addinfos) clip.push(' (' + addinfos + ')');
 								return clip;
 							});
 
-							more_info.append(property_list('Produced', prep_produces));
+							elems.push(property_list('Produced', prep_produces));
 						}
 
 						if (writes.length > 0) {
 							const prep_writes = writes.map(row => {
-								const {cliptitle, role, addinfos, worktype} = row;
+								const {cliptitle, worktype, role, addinfos} = row;
 								const ctitle = searchable(cliptitle);
 								const clip = [ctitle];
-								clip.push(mkParenCsv(role, addinfos, worktype));
+								clip.push(mkParenCsv(worktype, role, addinfos));
 								return clip;
 							});
-							more_info.append(property_list('Wrote', prep_writes));
+							elems.push(property_list('Wrote', prep_writes));
 						}
 
-						if (bio) {
-							const {realname, dateandplaceofbirth, height, biography, biographer,
-								   dateandcauseofdeath, trivia, personalquotes, trademark,
-								   wherearetheynow} = bio;
-
+						if (books.length > 0) elems.push(property_list('Related books', books));
+						if (salaries.length > 0) {
+							if (salaries.length == 1) elems.push(property('Salary', salaries));
+							else elems.push(property_list('Salaries', salaries));
 						}
+
+
+						more_info.append(elems);
 
 						more_info.slideDown();
 
@@ -229,25 +295,21 @@ $(() => {
 
 			const arrow = $('<i class="fas fa-angle-down"></i>')
 			clip_result.append(arrow);
+			clip_result.append(div('id').text(clip.clipid));
 
 			const more_info = div('more-info');
 			clip_result.append(more_info);
-
-
 
 			let fetched_infos = false;
 			let loader;
 
 			clip_result.click(() => {
 				arrow.toggleClass('fa-angle-down fa-angle-up');
-				
-				if (fetched_infos) {
+				if (loader) {
 					more_info.slideToggle();
 				} else {
-					if (!loader) {
-						loader = div('loader');
-						more_info.append(loader);
-					}
+					loader = div('loader');
+					more_info.append(loader);
 					more_info.show();
 					loader.fadeIn(200);
 					$.get('db/search/clip/' + clip.clipid).done(result => {
@@ -257,57 +319,76 @@ $(() => {
 						const {cliptype, clipyear, rating, genres, languages, associatedcountries,
 							 releasedates, runningtimes, cliplinks, acts, directs, produces, writes} = result;
 
+						const elems = [];
+
+						const delete_button = div('fa', 'fa-trash', 'delete-button');
+						delete_button.click((e) => {
+							e.stopImmediatePropagation();
+							if (confirm(`Do you really want to delete ${clip.cliptitle}`)) {
+								$.ajax({
+									url: 'db/clip/' + clip.clipid,
+									type: 'DELETE',
+									success: res => {
+										alert(`${clip.cliptitle} has been deleted`);
+										clip_result.remove();
+									},
+								});
+							}
+						})
+						elems.push(delete_button);
+
+
 						if (cliptype) {
-							more_info.append(property('Type', [typeToString(clip.cliptype)]));
+							elems.push(property('Type', [typeToString(clip.cliptype)]));
 						}
 
 						if (clipyear) {
-							more_info.append(property('Year', [clip.clipyear]))
+							elems.push(property('Year', [clip.clipyear]))
 						}
 
 						if (rating) {
 							const {rank, votes} = rating;
-							more_info.append(property('Rating', [rank + '/10 (' + votes + ' votes)']))
+							elems.push(property('Rating', [rank + '/10 (' + votes + ' votes)']))
 						}
 
 						if (genres.length > 0) {
-							more_info.append(property('Genres', genres));
+							elems.push(property('Genres', genres));
 						}
 
 						if (languages.length > 0) {
-							more_info.append(property('Languages', languages));
+							elems.push(property('Languages', languages));
 						}
 
 						if (associatedcountries.length > 0) {
-							more_info.append(property('Associated countries', associatedcountries));
+							elems.push(property('Associated countries', associatedcountries));
 						}
-						
+
 						if (releasedates.length > 0) {
-							prep_dates =  releasedates.map(row => {
-								const {releasecountry, releasedate} = row;
+							const prep_dates =  releasedates.map(row => {
+								const {countryname, releasedate} = row;
 								let text = releasedate;
-								if (releasecountry) text += ` (${releasecountry})`;
+								if (countryname) text += ` (${countryname})`;
 								return text;
 							});
 							if (releasedates.length == 1) {
-								more_info.append(property('Release date', prep_dates[0]));
+								elems.push(property('Release date', prep_dates));
 							} else {
-								more_info.append(property_list('Release dates', prep_dates));
+								elems.push(property_list('Release dates', prep_dates));
 							}
 						}
 
 						if (runningtimes.length > 0) {
-							prep_times =  runningtimes.map(row => {
-								const {releasecountry, runningtime} = row;
-								let text = releasedate;
-								if (runningtime) text += ` (${runningtime})`;
+							const prep_times =  runningtimes.map(row => {
+								const {countryname, runningtime} = row;
+								let text = runningtime;
+								if (countryname) text += ` (${countryname})`;
 								return text;
 							});
 
 							if (runningtimes.length == 1) {
-								more_info.append(property('Running times', prep_times[0]));
+								elems.push(property('Running times', prep_times));
 							} else {
-								more_info.append(property_list('Running times', prep_times));
+								elems.push(property_list('Running times', prep_times));
 							}
 						}
 
@@ -321,49 +402,51 @@ $(() => {
 								return staff;
 							});
 							
-							more_info.append(property_list('Starring', prep_acts));
+							elems.push(property_list('Starring', prep_acts));
 						}
 						
 						if (directs.length > 0) {
 							const prep_directs = directs.map(row => {
-								const {fullname, char, addinfos} = row;
+								const {fullname, role, addinfos} = row;
 								const name = searchable(fullname);
 								const staff = [name]
-								if (char) staff.push(' as ' + char);
+								if (role) staff.push(' as ' + role);
 								if (addinfos) staff.push(' (' + addinfos + ')');
 								return staff;
 							});
 
-							more_info.append(property_list('Directed by', prep_directs));
+							elems.push(property_list('Directed by', prep_directs));
 						}
 
 						if (produces.length > 0) {
 							const prep_produces = produces.map(row => {
-								const {fullname, addinfos, role} = row;
+								const {fullname, role, addinfos} = row;
 								const name = searchable(fullname);
 								const staff = [name];
-								if (addinfos) staff.push(' as a ' + addinfos);
-								if (role) staff.push(' (' + role + ')');
+								if (role) staff.push(' as a ' + role);
+								if (addinfos) staff.push(' (' + addinfos + ')');
 								return staff;
 							});
 
-							more_info.append(property_list('Produced by', prep_produces));
+							elems.push(property_list('Produced by', prep_produces));
 						}
 
 						if (writes.length > 0) {
 							const prep_writes = writes.map(row => {
-								const {fullname, role, addinfos, worktype} = row;
+								const {fullname, worktype, role, addinfos} = row;
 								const name = searchable(fullname);
 								const staff = [name];
 								staff.push(mkParenCsv(role, addinfos, worktype));
 								return staff;
 							});
-							more_info.append(property_list('Written by', prep_writes));
+							elems.push(property_list('Written by', prep_writes));
 						}
 
 						if (cliplinks.length > 0) {
-							more_info.append(property_list('Links', cliplinks.map(row => [row.linktype + ' ', searchable(row.cliptitle)])));
+							elems.push(property_list('Links', cliplinks.map(row => [row.linktype + ' ', searchable(row.cliptitle)])));
 						}
+
+						more_info.append(elems);
 						more_info.slideDown();
 					});
 				}
@@ -388,7 +471,7 @@ function property(name, values) {
 }
 
 function property_list(hname, items) {
-	const elem = div('property');
+	const elem = div('property_list');
 	const header = $('<h4></h4>').text(hname + ':');
 	elem.append(header);
 
@@ -433,5 +516,6 @@ function typeToString (type) {
 		case 'VG':
 			return 'video game';
 	}
-	return '';
+	return type;
 }
+

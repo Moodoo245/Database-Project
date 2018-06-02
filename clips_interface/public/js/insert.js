@@ -2,9 +2,9 @@ const tables = {
 	MovieStaff: ['FullName'],
 	Clips: ['ClipTitle', 'ClipYear', 'ClipType'],
 	Acts: ['StaffId', 'ClipId', 'Char', 'OrdersCredit', 'AddInfos'],
-	Directs: ['StaffId', 'ClipId', 'AddInfos', 'Role'],
-	Produces: ['StaffId', 'ClipId', 'AddInfos', 'Role'],
-	Writes: ['StaffId', 'ClipId', 'AddInfos', 'Role', 'WorkType'],
+	Directs: ['StaffId', 'ClipId', 'Role', 'AddInfos'],
+	Produces: ['StaffId', 'ClipId', 'Role', 'AddInfos'],
+	Writes: ['StaffId', 'ClipId', 'WorkType', 'Role', 'AddInfos'],
 	Biographies: ['StaffId', 'Name', 'RealName', 'DateAndPlaceOfBirth', 'Height', 'Biography',
 		'Biographer', 'DateAndCauseOfDeath', 'Trivia', 'PersonalQuotes', 'Trademark', 'WhereAreTheyNow'],
 	Nicknames: ['StaffId', 'Nickname'],
@@ -20,7 +20,7 @@ const tables = {
 	Country: ['CountryName'],
 	ReleasedIn: ['CountryId', 'ClipId', 'ReleaseDate'],
 	Associated: ['CountryId', 'ClipId'],
-	PlayedFor: ['CountryId', 'ClipId'],
+	PlayedFor: ['CountryId', 'ClipId', 'RunningTime'],
 }
 
 $(() => {

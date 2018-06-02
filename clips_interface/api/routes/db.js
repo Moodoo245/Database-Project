@@ -31,7 +31,6 @@ router.get('/tables', (request, response, next) => {
 });
 
 router.get('/columns/:table', (req, res, next) => {
-	console.log('hello');
 	query = "SELECT column_name FROM information_schema.columns WHERE table_schema='public' AND table_name='" + req.params.table + "'";	
 	pool.query(query, (err, result) => {
 		if (err) {
@@ -62,8 +61,73 @@ router.post('/insert', (req, res, next) => {
 			res.status(200).send('Insert succeeded');
 		}
 	});
-
 });
+
+const delete_clip_query = 'DELETE FROM Clips WHERE clipid = $1'
+router.delete('/clip/:clipid', (req, res, next) => {
+	const clipid = req.params.clipid;
+	pool.query(delete_clip_query, [clipid], (err, result) => {
+		if (err) {
+			console.log(err);
+			res.send('Deletion Failed');
+		} else {
+			res.send('Deletion Succeeded');
+		}
+	});
+});
+
+const delete_staff_query = 'DELETE FROM MovieStaff WHERE staffid = $1'
+router.delete('/staff/:staffid', (req, res, next) => {
+	const staffid = req.params.staffid;
+	pool.query(delete_staff_query, [staffid], (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(400).send('Deletion Failed');
+		} else {
+			res.status(200).send('Deletion Succeeded');
+		}
+	});
+});
+
+router.get('/languages', (req, res, next) => {
+	query = 'SELECT * FROM Languages';
+
+	pool.query(query, (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(400).send([]);
+		} else {
+			res.status(200).send(result.rows);
+		}
+	});
+});
+
+router.get('/genres', (req, res, next) => {
+	query = 'SELECT * FROM Genres';
+
+	pool.query(query, (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(400).send([]);
+		} else {
+			res.status(200).send(result.rows);
+		}
+	});
+});
+
+router.get('/countries', (req, res, next) => {
+	query = 'SELECT * FROM Country';
+
+	pool.query(query, (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(400).send([]);
+		} else {
+			res.status(200).send(result.rows.slice(1));
+		}
+	});
+});
+
 
 module.exports = router;
 
