@@ -34,6 +34,7 @@ $(() => {
 			columns.set(c, {
 				elem: div('column').text(c + ': ').append(input),
 				val() { return input.val() },
+				reset() { input.val('') },
 			});
 		}
 
@@ -62,8 +63,9 @@ $(() => {
 				}
 				console.log(msg);
 				$.post('db/insert', {msg: JSON.stringify(msg)}, res => {
-					console.log(res);
-				});
+					alert('Insert Succeeded');
+					[...columns.values()].forEach(v => v.reset());
+				}).fail(() => alert('Insert Failed'));
 			}
 
 			const insert_button = div().attr('id', 'insert_button').text('Insert');

@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<title>Clips</title>
+		<link rel="stylesheet" href="css/style.css">
+		<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+		<script src='js/queries.js'></script>
+	</head>
+
+	<body>
+		<!--menu bar-->
+		<div class="menu">
+			<div class="title">Clips</div>
+				<ul>
+					<li><a href="/search">Search</a></li>
+					<li><a href="/queries">Predefined Queries</a></li>
+					<li><a href="/insert">Insert/Delete</a></li>
+				</ul>
+		</div>
+		<div class="query_content">
+			<div id="query_selection">
+				<div class="button" onclick="select_query('2.a')">2.a</div>
+				<div class="button" onclick="select_query('2.b')">2.b</div>
+				<div class="button" onclick="select_query('2.c')">2.c</div>
+				<div class="button" onclick="select_query('2.d')">2.d</div>
+				<div class="button" onclick="select_query('2.e')">2.e</div>
+				<div class="button" onclick="select_query('2.f')">2.f</div>
+				<div class="button" onclick="select_query('2.g')">2.g</div>
+				<div class="button" onclick="select_query('2.h')">2.h</div>
+
+				<div class="button" onclick="select_query('3.a')">3.a</div>
+				<div class="button" onclick="select_query('3.b')">3.b</div>
+				<div class="button" onclick="select_query('3.c')">3.c</div>
+				<div class="button" onclick="select_query('3.d')">3.d</div>
+				<div class="button" onclick="select_query('3.e')">3.e</div>
+				<div class="button" onclick="select_query('3.f')">3.f</div>
+				<div class="button" onclick="select_query('3.g')">3.g</div>
+				<div class="button" onclick="select_query('3.h')">3.h</div>
+				<div class="button" onclick="select_query('3.i')">3.i</div>
+				<div class="button" onclick="select_query('3.j')">3.j</div>
+				<div class="button" onclick="select_query('3.k')">3.k</div>
+				<div class="button" onclick="select_query('3.l')">3.l</div>
+			</div>
+			<div id="query_display">
+				<div id="query_text"></div><br>
+				<div id="query_sql"></div><br>
+				<textarea id="query_temp" type="text" placeholder="Ecris ici"></textarea><br>
+				<div id="query_button">Execute</div><br>
+				<div id="query_result"></div>
+			</div>
+		</div>
+	</body>
+</html>

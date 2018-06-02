@@ -131,13 +131,14 @@ router.get('/countries', (req, res, next) => {
 
 module.exports = router;
 
-/*router.get('/search', (request, response, next) => {
+router.get('/search_temp', (request, response, next) => {
 	const query = request.query.query;
 
 	pool.query(query, (err, result) => {
 		if (err) {
 			console.log(err);
-			response.status(400).json({
+			response.status(200).json({
+				error: String(err),
 				fields: [],
 				rows: []
 			});
@@ -148,4 +149,4 @@ module.exports = router;
 			});
 		}
 	});
-});*/
+});

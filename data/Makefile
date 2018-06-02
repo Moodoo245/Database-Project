@@ -1,4 +1,4 @@
-all: delete clean import
+all: delete clean import post_clean
 
 clean: clean_staff clean_clips clean_acts clean_writes clean_directs clean_produces clean_biographies clean_clip_links clean_countries clean_associated clean_genres clean_languages clean_ratings clean_releasedates clean_runningtimes
 
@@ -111,6 +111,9 @@ import_releasedin: scripts/import_csv.py cleaned/releasedates_cleaned.csv
 
 import_playedfor: scripts/import_csv.py cleaned/runningtimes_cleaned.csv
 	python scripts/import_csv.py cleaned/runningtimes_cleaned.csv playedfor
+
+post_clean: scripts/post_clean.sql scripts/post_clean.py
+	python scripts/post_clean.py
 
 create: scripts/create_tables.py
 	python scripts/create_tables.py

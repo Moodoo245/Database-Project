@@ -17,8 +17,12 @@ app.get('/search', (req, res) => {
 	res.sendFile(__dirname + '/views/search.html');
 });
 
-app.get('/insert_delete', (req, res) => {
-	res.sendFile(__dirname + '/views/insert_delete.html');
+app.get('/insert', (req, res) => {
+	res.sendFile(__dirname + '/views/insert.html');
+});
+
+app.get('/queries', (req, res) => {
+	res.sendFile(__dirname + '/views/queries.html');
 });
 
 module.exports = app

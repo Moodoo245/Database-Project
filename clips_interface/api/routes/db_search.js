@@ -15,10 +15,14 @@ router.get('/staff', (request, response, next) => {
 	}
 
 	const exists = [];
-	if (query.actors == 'true') exists.push('EXISTS(SELECT 1 FROM acts WHERE acts.staffID = S.staffID)');
-	if (query.directors == 'true') exists.push('EXISTS(SELECT 1 FROM directs WHERE directs.staffID = S.staffID)');
-	if (query.producers == 'true') exists.push('EXISTS(SELECT 1 FROM produces WHERE produces.staffID = S.staffID)');
-	if (query.writers == 'true') exists.push('EXISTS(SELECT 1 FROM writes WHERE writes.staffID = S.staffID)');
+	if (query.actors == 'true' && query.directors == 'true' && query.directors == 'true' && query.writers == 'true') {
+		exists.push('TRUE');
+	} else {
+		if (query.actors == 'true') exists.push('EXISTS(SELECT 1 FROM acts WHERE acts.staffID = S.staffID)');
+		if (query.directors == 'true') exists.push('EXISTS(SELECT 1 FROM directs WHERE directs.staffID = S.staffID)');
+		if (query.producers == 'true') exists.push('EXISTS(SELECT 1 FROM produces WHERE produces.staffID = S.staffID)');
+		if (query.writers == 'true') exists.push('EXISTS(SELECT 1 FROM writes WHERE writes.staffID = S.staffID)');
+	}
 
 	// if none of the staffs is asked then no need to query anything => empty result
 	if (!exists.length) {
@@ -33,7 +37,6 @@ router.get('/staff', (request, response, next) => {
 
 	pool.query(queryString, (err, result) => {
 		if (err) {
-			console.log(queryString);
 			console.log(err);
 			response.status(400).send([]);
 		} else {
@@ -43,10 +46,10 @@ router.get('/staff', (request, response, next) => {
 });
 
 // prepared staff queries
-const sacts_query = 'SELECT acts.*, clips.cliptitle FROM acts INNER JOIN clips ON acts.clipid = clips.clipid WHERE staffid = $1';
-const sdirects_query = 'SELECT directs.*, clips.cliptitle FROM directs INNER JOIN clips ON directs.clipid = clips.clipid WHERE staffid = $1';
-const sproduces_query = 'SELECT produces.*, clips.cliptitle FROM produces INNER JOIN clips ON produces.clipid = clips.clipid WHERE staffid = $1';
-const swrites_query = 'SELECT writes.*, clips.cliptitle FROM writes INNER JOIN clips ON writes.clipid = clips.clipid WHERE staffid = $1';
+const sacts_query = 'SELECT acts.*, clips.cliptitle FROM acts NATURAL JOIN clips WHERE staffid = $1';
+const sdirects_query = 'SELECT directs.*, clips.cliptitle FROM directs NATURAL JOIN clips WHERE staffid = $1';
+const sproduces_query = 'SELECT produces.*, clips.cliptitle FROM produces NATURAL JOIN clips WHERE staffid = $1';
+const swrites_query = 'SELECT writes.*, clips.cliptitle FROM writes NATURAL JOIN clips WHERE staffid = $1';
 const bio_query = 'SELECT * FROM biographies bio WHERE staffid = $1';
 const spouses_query = 'SELECT spouse FROM spouses WHERE staffid = $1';
 const nicknames_query = 'SELECT nickname FROM nicknames WHERE staffid = $1';
@@ -104,7 +107,7 @@ router.get('/clip', (request, response, next) => {
 		return;
 	}
 
-	const innerJoins = [];
+	const joins = [];
 	const conditions = [`LOWER(ClipTitle) LIKE LOWER('%${query.text}%')`];
 
 	if (query.type) {
@@ -116,32 +119,29 @@ router.get('/clip', (request, response, next) => {
 	}
 
 	if (query.bound_rating) {
-		innerJoins.push('INNER JOIN Ratings ON Clips.clipid = Ratings.clipid');
+		joins.push('NATURAL JOIN Ratings');
 		conditions.push(`Ratings.rank BETWEEN ${query.gt_rating} AND ${query.lt_rating}`);
 	}
 
 	if (query.genreId) {
-		innerJoins.push('INNER JOIN Classified ON Clips.clipid = Classified.clipid');
+		joins.push('NATURAL JOIN Classified');
 		conditions.push(`Classified.genreid = ${query.genreId}`);
 	}
 
 	if (query.languageId) {
-		innerJoins.push('INNER JOIN Speaks ON Clips.clipid = Speaks.clipid');
+		joins.push('NATURAL JOIN Speaks');
 		conditions.push(`Speaks.languageid = ${query.languageId}`);
 	}
 
 	if (query.associatedCountryId) {
-		innerJoins.push('INNER JOIN Associated ON Clips.clipid = Associated.clipid');
+		joins.push('NATURAL JOIN Associated');
 		conditions.push(`Associated.countryid = ${query.associatedCountryId}`);
 	}
 
-	const queryString = `SELECT * FROM Clips ${innerJoins.join(' ')} WHERE ${conditions.join(' AND ')} LIMIT ${query.limit}`;
-
-	console.log(queryString);
+	const queryString = `SELECT * FROM Clips ${joins.join(' ')} WHERE ${conditions.join(' AND ')} LIMIT ${query.limit}`;
 
 	pool.query(queryString, (err, result) => {
 		if (err) {
-			console.log(queryString);
 			console.log(err);
 			response.status(400).send([]);
 		} else {
@@ -153,16 +153,16 @@ router.get('/clip', (request, response, next) => {
 // prepared clip queries
 const clip_query = 'SELECT cliptype, clipyear FROM clips WHERE clipid = $1';
 const ratings_query = 'SELECT rank, votes FROM ratings WHERE clipid = $1';
-const genres_query = 'SELECT genre FROM genres INNER JOIN classified ON genres.genreid = classified.genreid WHERE clipid = $1';
-const languages_query = 'SELECT language FROM languages INNER JOIN speaks ON languages.languageid = speaks.languageid WHERE clipid = $1';
-const associatedcountries_query = 'SELECT countryname FROM associated INNER JOIN country ON associated.countryid = country.countryid WHERE clipid = $1';
-const releasedates_query = 'SELECT countryname, releasedate FROM releasedin INNER JOIN country ON releasedin.countryid = country.countryid WHERE clipid = $1';
-const runningtimes_query = 'SELECT countryname, runningtime FROM playedfor INNER JOIN country ON playedfor.countryid = country.countryid WHERE clipid = $1';
-const cliplinks_query = 'SELECT cliptitle, linktype FROM cliplinks INNER JOIN clips ON clipto = clipid WHERE clipfrom = $1';
-const cacts_query = 'SELECT acts.*, S.fullname FROM acts INNER JOIN moviestaff S ON acts.staffid = S.staffid WHERE clipid = $1';
-const cdirects_query = 'SELECT directs.*, S.fullname FROM directs INNER JOIN moviestaff S ON directs.staffid = S.staffid WHERE clipid = $1';
-const cproduces_query = 'SELECT produces.*, S.fullname FROM produces INNER JOIN moviestaff S ON produces.staffid = S.staffid WHERE clipid = $1';
-const cwrites_query = 'SELECT writes.*, S.fullname FROM writes INNER JOIN moviestaff S ON writes.staffid = S.staffid WHERE clipid = $1';
+const genres_query = 'SELECT genre FROM genres NATURAL JOIN classified WHERE clipid = $1';
+const languages_query = 'SELECT language FROM languages NATURAL JOIN speaks WHERE clipid = $1';
+const associatedcountries_query = 'SELECT countryname FROM associated NATURAL JOIN country WHERE clipid = $1';
+const releasedates_query = 'SELECT countryname, releasedate FROM releasedin NATURAL JOIN country WHERE clipid = $1';
+const runningtimes_query = 'SELECT countryname, runningtime FROM playedfor NATURAL JOIN country WHERE clipid = $1';
+const cliplinks_query = 'SELECT cliptitle, linktype FROM cliplinks NATURAL JOIN clips WHERE clipfrom = $1';
+const cacts_query = 'SELECT acts.*, S.fullname FROM acts NATURAL JOIN moviestaff S WHERE clipid = $1';
+const cdirects_query = 'SELECT directs.*, S.fullname FROM directs NATURAL JOIN moviestaff S WHERE clipid = $1';
+const cproduces_query = 'SELECT produces.*, S.fullname FROM produces NATURAL JOIN moviestaff S WHERE clipid = $1';
+const cwrites_query = 'SELECT writes.*, S.fullname FROM writes NATURAL JOIN moviestaff S WHERE clipid = $1';
 
 router.get('/clip/:clipid', (request, response, next) => {
 	const clipid = request.params.clipid;
@@ -202,8 +202,6 @@ router.get('/clip/:clipid', (request, response, next) => {
 			});
 		} else {
 			const {cliptype, clipyear} = results.clip.rows[0] || {};
-			console.log(cliptype);
-			console.log(results.clip.rows[0]);
 			response.status(200).json({
 				cliptype: cliptype,
 				clipyear: clipyear,
