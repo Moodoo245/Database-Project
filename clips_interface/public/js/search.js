@@ -259,7 +259,7 @@ $(() => {
 								const {cliptitle, worktype, role, addinfos} = row;
 								const ctitle = searchable(cliptitle);
 								const clip = [ctitle];
-								clip.push(mkParenCsv(worktype, role, addinfos));
+								clip.push(' ' + mkParenCsv(worktype, role, addinfos));
 								return clip;
 							});
 							elems.push(property_list('Wrote', prep_writes));
@@ -436,7 +436,7 @@ $(() => {
 								const {fullname, worktype, role, addinfos} = row;
 								const name = searchable(fullname);
 								const staff = [name];
-								staff.push(mkParenCsv(role, addinfos, worktype));
+								staff.push(' ' + mkParenCsv(role, addinfos, worktype));
 								return staff;
 							});
 							elems.push(property_list('Written by', prep_writes));
@@ -486,8 +486,6 @@ function property_list(hname, items) {
 }
 
 function mkParenCsv(...items) {
-	if (typeof array != Array) return '';
-	
 	let s = '';
 	let first = true;
 	for (let item of items) {
