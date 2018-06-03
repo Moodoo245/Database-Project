@@ -112,6 +112,19 @@ WHERE C.GenreId = (SELECT C.genreId FROM Classified C
 	LIMIT 1)
 
 -- 3.j
+WITH Comedies AS (
+	SELECT ClipId FROM Classified
+	NATURAL JOIN Genres
+	WHERE genre = 'Comedy'
+), Dramas AS (
+	SELECT ClipId FROM Classified
+	NATURAL JOIN Genres
+	WHERE genre = 'Drama'
+), Shorts AS (
+	SELECT ClipId FROM Classified
+	NATURAL JOIN Genres
+	WHERE genre = 'Short')
+							
 SELECT S.FullName,
 	SUM(CASE WHEN EXISTS(SELECT 1 FROM Comedies C WHERE C.ClipId = A.ClipId) THEN 1 ELSE 0 END) AS Comedies,
 	SUM(CASE WHEN EXISTS(SELECT 1 FROM Dramas D WHERE D.ClipId = A.ClipId) THEN 1 ELSE 0 END) AS Dramas
