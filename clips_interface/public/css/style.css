@@ -347,33 +347,28 @@ input[type=text]:disabled {
 	box-shadow: 5px 5px 5px 0px #888888;
 	cursor: pointer;
 	color: white;
+	display: none;
 }
 
 #query_button:hover {
 	background-color: #222222;
 }
 
-#query_temp {
-	width: 500px;
-	height: 200px;
-	margin: 12px;
-	box-shadow: 5px 5px 5px 0px #888888;
-}
-
-.query_result {
+#query_result {
 	overflow-x: auto;
+	display: inline-block;
 }
 
-.query_result table {
+#query_result > table {
 	border-collapse: collapse;
 	width: 100%;
 }
 
-.query_result th, tr:nth-child(odd) {
+#query_result th, tr:nth-child(odd) {
 	background-color: white;
 }
 
-.query_result th, td {
+#query_result th, td {
 	text-align: left;
 	padding: 8px;
 }

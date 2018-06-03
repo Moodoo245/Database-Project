@@ -21,15 +21,27 @@ const queries = {
 	'3.l': 'Print the name of the producer whose role is coordinating producer, and who has produced the highest number of movies with the most popular genre',
 };
 
+const sql = {
+	'2.a': `SELECT C.ClipTitle, P.RunningTime
+		FROM Clips C
+		NATURAL JOIN PlayedFor P
+		NATURAL JOIN Country C2
+		WHERE C2.CountryName = 'France'
+		AND P.RunningTime IS NOT NULL
+		ORDER BY P.RunningTime DESC
+		LIMIT 10`,
+}
+
 function select_query(id) {
 	$('#query_text').text(queries[id]);
-	$('#query_sql').text('SELECT 1 FROM NULL');
+	$('#query_sql').text(sql[id]);
 	$('#query_button').css('display', 'inline-block');
 }
 
 $(() => {
 	$('#query_button').click(() => {
-		const query = $('#query_temp').val();
+		const query = $('#query_sql').text();
+		console.log(query);
 		$.get('/db/search_temp', {query: query}, (result) => {
 			if (result.error) {
 				alert(result.error);
