@@ -337,6 +337,8 @@ input[type=text]:disabled {
 	background-color: white;
 	border-radius: 5px;
 	display: inline-block;
+	text-align: left;
+	font-size: 14px;
 }
 
 #query_button {

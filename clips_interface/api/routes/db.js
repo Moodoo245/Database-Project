@@ -145,7 +145,7 @@ router.get('/search_temp', (request, response, next) => {
 		} else {
 			response.status(200).json({
 				fields: result.fields.map(f => f.name),
-				rows: result.rows
+				rows: result.rows.slice(0,1000),
 			});
 		}
 	});
