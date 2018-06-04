@@ -80,9 +80,10 @@ SELECT S.FullName
 FROM MovieStaff S
 WHERE S.StaffId IN(
 	SELECT W.StaffId
-	FROM Writes W, Produces P
-	WHERE W.WorkType = "screenplay"
-	AND(	SELECT COUNT(DISTINCT P.ClipId)
+	FROM Writes W
+	WHERE W.AddInfos = 'screenplay'
+	AND(	
+		SELECT COUNT(P.ClipId)
 		FROM Produces P
 		WHERE W.ClipId = P.ClipId
 	) > 2
