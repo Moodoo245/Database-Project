@@ -352,12 +352,15 @@ input[type=text]:disabled {
 	display: none;
 }
 
+#query_selected {
+	background-color: #222222;
+}
+
 #query_button:hover {
 	background-color: #222222;
 }
 
 #query_result {
-	overflow-x: auto;
 	display: inline-block;
 }
 

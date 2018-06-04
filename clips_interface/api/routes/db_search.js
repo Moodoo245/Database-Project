@@ -153,17 +153,16 @@ router.get('/clip', (request, response, next) => {
 // prepared clip queries
 const clip_query = 'SELECT cliptype, clipyear FROM clips WHERE clipid = $1';
 const ratings_query = 'SELECT rank, votes FROM ratings WHERE clipid = $1';
-const genres_query = 'SELECT genre FROM genres NATURAL JOIN classified WHERE clipid = $1';
-const languages_query = 'SELECT language FROM languages NATURAL JOIN speaks WHERE clipid = $1';
-const associatedcountries_query = 'SELECT countryname FROM associated NATURAL JOIN country WHERE clipid = $1';
-const releasedates_query = 'SELECT countryname, releasedate FROM releasedin NATURAL JOIN country WHERE clipid = $1';
-const runningtimes_query = 'SELECT countryname, runningtime FROM playedfor NATURAL JOIN country WHERE clipid = $1';
-const cliplinks_query = 'SELECT cliptitle, linktype FROM cliplinks NATURAL JOIN clips WHERE clipfrom = $1';
-const cacts_query = 'SELECT acts.*, S.fullname FROM acts NATURAL JOIN moviestaff S WHERE clipid = $1';
-const cdirects_query = 'SELECT directs.*, S.fullname FROM directs NATURAL JOIN moviestaff S WHERE clipid = $1';
-const cproduces_query = 'SELECT produces.*, S.fullname FROM produces NATURAL JOIN moviestaff S WHERE clipid = $1';
-const cwrites_query = 'SELECT writes.*, S.fullname FROM writes NATURAL JOIN moviestaff S WHERE clipid = $1';
-
+const genres_query = 'SELECT genre FROM genres INNER JOIN classified ON genres.genreid = classified.genreid WHERE clipid = $1';
+const languages_query = 'SELECT language FROM languages INNER JOIN speaks ON languages.languageid = speaks.languageid WHERE clipid = $1';
+const associatedcountries_query = 'SELECT countryname FROM associated INNER JOIN country ON associated.countryid = country.countryid WHERE clipid = $1';
+const releasedates_query = 'SELECT countryname, releasedate FROM releasedin INNER JOIN country ON releasedin.countryid = country.countryid WHERE clipid = $1';
+const runningtimes_query = 'SELECT countryname, runningtime FROM playedfor INNER JOIN country ON playedfor.countryid = country.countryid WHERE clipid = $1';
+const cliplinks_query = 'SELECT cliptitle, linktype FROM cliplinks INNER JOIN clips ON clipto = clipid WHERE clipfrom = $1';
+const cacts_query = 'SELECT acts.*, S.fullname FROM acts INNER JOIN moviestaff S ON acts.staffid = S.staffid WHERE clipid = $1';
+const cdirects_query = 'SELECT directs.*, S.fullname FROM directs INNER JOIN moviestaff S ON directs.staffid = S.staffid WHERE clipid = $1';
+const cproduces_query = 'SELECT produces.*, S.fullname FROM produces INNER JOIN moviestaff S ON produces.staffid = S.staffid WHERE clipid = $1';
+const cwrites_query = 'SELECT writes.*, S.fullname FROM writes INNER JOIN moviestaff S ON writes.staffid = S.staffid WHERE clipid = $1';
 router.get('/clip/:clipid', (request, response, next) => {
 	const clipid = request.params.clipid;
 
